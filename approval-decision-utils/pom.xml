@@ -53,45 +53,11 @@
 				<artifactId>project-build-plugin</artifactId>
 				<version>${project.build.plugin.version}</version>
 				<extensions>true</extensions>
-				<executions>
-					<execution>
-						<id>annotation-proc</id>
-						<phase>generate-sources</phase>
-						<goals>
-							<goal>compileProject</goal>
-						</goals>
-						<configuration>
-							<compilerOptions>
-								<compilerOption>-ApersistenceXml=${basedir}/src/META-INF/persistence.xml</compilerOption>
-								<compilerOption>-s</compilerOption>
-								<compilerOption>${basedir}/src_generated</compilerOption>
-								<compilerOption>-proc:only</compilerOption>
-							</compilerOptions>
-							<skipScriptValidation>true</skipScriptValidation>
-						</configuration>
-					</execution>
-				</executions>
 				<configuration>
 					<ivyVersion>${ivy.engine.version}</ivyVersion>
 					<compilerOptions>
 						<compilerOption>-proc:none</compilerOption>
 					</compilerOptions>
-				</configuration>
-			</plugin>
-			<plugin>
-				<artifactId>maven-clean-plugin</artifactId>
-				<version>3.1.0</version>
-				<configuration>
-					<filesets>
-						<fileset>
-							<directory>${basedir}/src_generated</directory>
-							<followSymlinks>false</followSymlinks>
-							<useDefaultExcludes>true</useDefaultExcludes>
-							<includes>
-								<include>**/*.java</include>
-							</includes>
-						</fileset>
-					</filesets>
 				</configuration>
 			</plugin>
 		</plugins>
