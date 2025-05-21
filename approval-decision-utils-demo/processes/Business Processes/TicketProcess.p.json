@@ -2,7 +2,7 @@
   "$schema" : "https://json-schema.axonivy.com/process/12.0.0/process.json",
   "id" : "18BA886784A13BAE",
   "config" : {
-    "data" : "com.axonivy.utils.approvaldecision.Data"
+    "data" : "com.axonivy.utils.approvaldecision.demo.Data"
   },
   "elements" : [ {
       "id" : "f0",
