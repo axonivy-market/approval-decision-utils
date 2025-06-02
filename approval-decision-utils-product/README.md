@@ -6,8 +6,8 @@ Axon Ivy's Approval Decision Utils provides a standardized approach for implemen
 - Implements a comment function for better documentation.
 - Provides a clear view of the ongoing approval history to meet regulatory, compliance, and transparency requirements.
 
-## Demo
-The Demo shows how to integrate Approval-Decision-Utils in your project. It contains a simplest HSQLDB as datasource, that can be run without additional configuration. 
+## Demo 
+The demo shows how to integrate Approval-Decision-Utils into your project. It includes a simple HSQLDB datasource that can run without additional configuration.
 
 ### 1. Display decision option
 
@@ -48,9 +48,29 @@ Approval Decision Utils already includes [Axon Ivy Persistence Utils](https://gi
 
 #### Provide bean for the UI Component `ApprovalDecision`
 
-Create a managed bean extends `AbstractApprovalDecisionBean`.
+Create a bean class extends `AbstractApprovalDecisionBean` with constructor parameters: histories, decisions, confirmations.
 
-The enum `ApprovalDecisionOption` to obtain decision options. If you prefer to use your own enum as options for decision, override the managed bean methods `getDecisionLabel(String decisionName)`, `List<Enum<?>> getDecisions()`.
+There are a pre-defined enum `ApprovalDecisionOption` (values: APPROVAL, REJECT) can be used as decisions of the bean.
+
+For example:
+
+	public class SimpleApprovalBean extends AbstractApprovalDecisionBean<ApprovalHistory, Long> {
+
+		private static final long serialVersionUID = 1L;
+
+		public SimpleApprovalBean() {
+			super(null, List.of(ApprovalDecisionOption.values()), null);
+		}
+
+		@Override
+		protected Class<ApprovalHistory> getApprovalHistoryType() {
+			return ApprovalHistory.class;
+		}
+	}
+
+In case of using your own enum, please override the bean method `getDecisionLabel(String decisionName)`,  where the decisionName is value string of your custom enum.
+
+In the Demo, the bean `TicketApprovalDecisionBean` uses decision options from the enum `TicketProcessApprovalDecision`.	
 
 ### The UI component
      <ic:com.axonivy.utils.approvaldecision.ApprovalDecision

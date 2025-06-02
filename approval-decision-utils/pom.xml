@@ -34,7 +34,6 @@
 			<version>${axonivy.persistence.version}</version>
 		</dependency>
 	</dependencies>
-
 	<pluginRepositories>
 		<pluginRepository>
 			<id>sonatype</id>
@@ -53,6 +52,24 @@
 				<artifactId>project-build-plugin</artifactId>
 				<version>${project.build.plugin.version}</version>
 				<extensions>true</extensions>
+				<executions>
+					<execution>
+						<id>annotation-proc</id>
+						<phase>generate-sources</phase>
+						<goals>
+							<goal>compileProject</goal>
+						</goals>
+						<configuration>
+							<compilerOptions>
+								<compilerOption>-ApersistenceXml=${basedir}/src/META-INF/persistence.xml</compilerOption>
+								<compilerOption>-s</compilerOption>
+								<compilerOption>${basedir}/src_generated</compilerOption>
+								<compilerOption>-proc:only</compilerOption>
+							</compilerOptions>
+							<skipScriptValidation>true</skipScriptValidation>
+						</configuration>
+					</execution>
+				</executions>
 				<configuration>
 					<ivyVersion>${ivy.engine.version}</ivyVersion>
 					<compilerOptions>

@@ -1,4 +1,4 @@
 Data #class
-com.axonivy.utils.approvaldecision #namespace
+com.axonivy.utils.approvaldecision.demo #namespace
 decision String #field
 decision PERSISTENT #fieldModifier
