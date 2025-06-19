@@ -18,12 +18,9 @@ public class TicketApprovalDecisionBean extends AbstractApprovalDecisionBean<App
 	private String validatorId;
 
 	public TicketApprovalDecisionBean(TicketRequest request, List<Enum<?>> decisions, List<Enum<?>> confirmations) {
+		super(request.getApprovalHistories(), decisions, confirmations);
+		
 		this.validatorId = VALIDATOR_ID;
-		init(request, decisions, confirmations);
-	}
-
-	private void init(TicketRequest request, List<Enum<?>> decisions, List<Enum<?>> confirmations) {
-		initializeApprovalApprovalDecision(request.getApprovalHistories(), decisions, confirmations);
 	}
 
 	@Override
@@ -42,17 +39,17 @@ public class TicketApprovalDecisionBean extends AbstractApprovalDecisionBean<App
 		return TicketProcessApprovalConfirmation.valueOf(confirmationName).getCmsName();
 	}
 
-	@Override
-	protected ApprovalHistory initApprovalHistory() {
-		return new ApprovalHistory();
-	}
-
 	public String getValidatorId() {
 		return validatorId;
 	}
 
 	public void setValidatorId(String validatorId) {
 		this.validatorId = validatorId;
+	}
+
+	@Override
+	protected Class<ApprovalHistory> getApprovalHistoryType() {
+		return ApprovalHistory.class;
 	}
 
 }
