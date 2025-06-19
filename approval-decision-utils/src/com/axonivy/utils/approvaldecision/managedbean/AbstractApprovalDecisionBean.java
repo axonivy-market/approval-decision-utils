@@ -1,6 +1,7 @@
 package com.axonivy.utils.approvaldecision.managedbean;
 
 import java.io.Serializable;
+import java.lang.reflect.InvocationTargetException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -31,11 +32,26 @@ public abstract class AbstractApprovalDecisionBean<T extends BaseApprovalHistory
 	private List<T> approvalHistories = new ArrayList<>();
 	private SortMeta defaultSortField;
 	
-	public AbstractApprovalDecisionBean(){
-		this.approvalHistory = initApprovalHistory();
-	}
+	@SuppressWarnings("unused")
+	private AbstractApprovalDecisionBean() { }
 	
-	protected abstract T initApprovalHistory();
+	public AbstractApprovalDecisionBean(List<T> histories, List<Enum<?>> decisions, List<Enum<?>> confirmations) {
+		setDecisions(decisions);
+		setConfirmations(confirmations);
+		initApprovalHistories(histories);
+		initSelectedConfirmations();
+	}
+
+	protected abstract Class<T> getApprovalHistoryType();
+	
+	private T initApprovalHistory() {
+		try {
+			return getApprovalHistoryType().getDeclaredConstructor().newInstance();
+		} catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException
+				| NoSuchMethodException | SecurityException e) {
+			throw new RuntimeException("Cannot instantiate ApprovalHistory", e);
+		}
+	}
 	
 	/**
 	 * Get decision name from an enum. We use enum ApprovalDecisionOption by
@@ -70,18 +86,6 @@ public abstract class AbstractApprovalDecisionBean<T extends BaseApprovalHistory
 	public void handleConfirmation() {
 		approvalHistory.setSelectedConfirmations(
 				String.join(",", selectedConfirmations.stream().map(Enum::name).toList()).trim());
-	}
-
-	/**
-	 * Initialize editing approval history and show old approval histories.
-	 *
-	 */
-	public void initializeApprovalApprovalDecision(List<T> histories, List<Enum<?>> decisions,
-			List<Enum<?>> confirmations) {
-		setDecisions(decisions);
-		setConfirmations(confirmations);
-		initApprovalHistories(histories);
-		initSelectedConfirmations();
 	}
 
 	private void initApprovalHistories(List<T> histories) {

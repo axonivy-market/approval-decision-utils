@@ -6,7 +6,8 @@ Axon Ivy's Approval Decision Utils provides a standardized approach for implemen
 - Implements a comment function for better documentation.
 - Provides a clear view of the ongoing approval history to meet regulatory, compliance, and transparency requirements.
 
-## Demo
+## Demo 
+The demo shows how to integrate Approval-Decision-Utils into your project. It includes a simple HSQLDB datasource that can run without additional configuration.
 
 ### 1. Display decision option
 
@@ -26,56 +27,52 @@ Axon Ivy's Approval Decision Utils provides a standardized approach for implemen
 
 ## Setup
 
-### Approach
+To integrate and use  Approval Decision Utils in your project, you must
+- create database tables:  your business data table, table `ApprovalHistory`, and a table for relationship between `ApprovalHistory` & your business data table.
+- provide entities & DAO classes
+- provide the project a bean for the UI Component `ApprovalDecision`
 
-Decision data is stored in a database table named `ApprovalHistory`. This table stores the selected decisions, comments, approval dates, and confirmations.
+#### Create database tables
 
-The data from this table will be utilized to populate the Approval History section.
+Create 3 tables: business data table, table `ApprovalHistory`, and a join table linking `ApprovalHistory` with the business data table.
 
-### Set up database
+In the Demo, business data table is `TicketRequest`, the full script [here](/script/scripts.sql).
 
-- Create the `ApprovalHistory` table with default columns for storing decision data. Additional columns can be added based on business. You can also modify the table name.
-- The `RequestApprovalHistory` table establishes the relationship between your business data and the approval history.
+#### Provide entities & DAO classes
 
-For example, suppose your business data is stored in a table named `TicketRequest`. The following script creates tables and establishes the relationship.
+Create 2 entites: 
+- business data entity which extends class `BaseRequest`.
+- entity `ApprovalHistory` which extends class `BaseApprovalHistory`.
 
-    create table ApprovalHistory (
-    	id varchar(32) not null,
-    	...
-    );
+Approval Decision Utils already includes [Axon Ivy Persistence Utils](https://github.com/axonivy-market/persistence-utils) library to interact with the database.
 
-    create table RequestApprovalHistory (
-    	requestId varchar(32) not null,
-    	approvalHistoryId varchar(32) not null,
-    	primary key (requestId, approvalHistoryId)
-    )
+#### Provide bean for the UI Component `ApprovalDecision`
 
-    alter table RequestApprovalHistory
-       add constraint fk_requestApprovalHistory_request
-       foreign key (requestId)
-       references TicketRequest(id)
+Create a bean class extends `AbstractApprovalDecisionBean` with constructor parameters: histories, decisions, confirmations.
 
-    alter table RequestApprovalHistory
-       add constraint fk_requestApprovalHistory_approvalHistory
-       foreign key (approvalHistoryId)
-       references ApprovalHistory(id);
+There are a pre-defined enum `ApprovalDecisionOption` (values: APPROVAL, REJECT) can be used as decisions of the bean.
 
-### Implement the Java backend
+For example:
 
-The component uses [Axon Ivy Persistence Utils](https://github.com/axonivy-market/persistence-utils) library to interact with the database.
+	public class SimpleApprovalBean extends AbstractApprovalDecisionBean<ApprovalHistory, Long> {
 
-- Your business entity needs to extend the `BaseRequest` class.
-- The `ApprovalHistory` entity needs to extend the `BaseApprovalHistory` class.
+		private static final long serialVersionUID = 1L;
 
-Example:
+		public SimpleApprovalBean() {
+			super(null, List.of(ApprovalDecisionOption.values()), null);
+		}
 
-    public class TicketRequest extends BaseRequest<ApprovalHistory>{}
-    public class ApprovalHistory extends BaseApprovalHistory{}
+		@Override
+		protected Class<ApprovalHistory> getApprovalHistoryType() {
+			return ApprovalHistory.class;
+		}
+	}
 
-### Integrate Approval decision to HTML dialog
+In case of using your own enum, please override the bean method `getDecisionLabel(String decisionName)`,  where the decisionName is value string of your custom enum.
 
-Example:
+In the Demo, the bean `TicketApprovalDecisionBean` uses decision options from the enum `TicketProcessApprovalDecision`.	
 
+### The UI component
      <ic:com.axonivy.utils.approvaldecision.ApprovalDecision
     	id="approvalDecision"
     	managedBean="#{managedBean.approvalDecisionBean}"
@@ -100,52 +97,7 @@ Example:
 
 ![](./images/1-request.png)
 
-### Create managed bean
-
-Create the managed bean of this component by extending `com.axonivy.utils.approvaldecision.managedbean.AbstractApprovalDecisionBean` class.
-
-By default, the component uses the enum `com.axonivy.utils.approvaldecision.enums.ApprovalDecisionOption` to obtain decision options. If you prefer to use your own enum as options for decision, override the methods `getDecisionLabel()`, `getDecisions()`.
-
-### Handle save/submit approval histories in your managed bean.
-
-Handle save/submit by calling methods from the managed bean created from previous step:
-
-- `handleApprovalHistoryBeforeSave()`: triggered when the `Save` action is called.
-- `handleApprovalHistoryBeforeSubmit()`: triggered when the `Submit` action is called.
-
-Proceed to map approval histories to the entity and save.
-
-Example: in the managed bean `TicketProcessBean`:
-
-    public void save() {
-    	approvalDecisionBean.handleApprovalHistoryBeforeSave(this.request.getApprovalHistories());
-    	handleSaving();
-    	TicketProcessUtils.showInfo();
-    }
-    private void handleSaving() {
-    	TicketRequest saved = TicketRequestDAO.getInstance().save(this.request);
-    	setRequest(saved);
-    	this.approvalDecisionBean.setApprovalHistory(this.request.getApprovalHistories().stream()
-    			.filter(p -> p.getIsEditing()).findFirst().orElse(new ApprovalHistory()));
-    }
-
-### Customize Approval history table (Optional)
-
-The Approval history table is initially sorted by approval date in descending order. To customize the sort order, start by disabling the default sort through overriding the method `isApprovalHistoryTableSortDescending()`.
-
-    @Override public boolean isApprovalHistoryTableSortDescending() { return false; }
-
-Next, implement the custom sort by overriding the method `getApprovalHistoryTableSortField()`. The following fields are supported to sort:
-
-- displayApprovalDate: Approval date.
-- displayUserName: Name of the creator.
-- comment: Comment.
-
-Example:
-
-    @Override public String getApprovalHistoryTableSortField() { return "displayUserName"; }
-
-### Attributes
+#### Attributes
 
 - `managedBean`: It is required and must extend `com.axonivy.utils.approvaldecision.managedbean.AbstractApprovalDecisionBean` class.
 - `isReadOnly`: Configures the component to be read-only. The default is `false`.
@@ -177,7 +129,7 @@ Example:
 - `approvalHistoryRendered`: Flag to render the approval history table. Default is `true`.
 - `approvalHistoryPanelStyleClass`: Style class for the panel of the approval history table.
 
-Facets
+#### Facets
 
 ---
 
@@ -240,3 +192,19 @@ Example: The following code adds the label `Email address of relevant department
     </ic:com.axonivy.utils.approvaldecision.ApprovalDecision>
 
 ![](./images/2-request-custom-content.png)
+
+#### Customize Approval history table (Optional)
+
+The Approval history table is initially sorted by approval date in descending order. To customize the sort order, start by disabling the default sort through overriding the method `isApprovalHistoryTableSortDescending()`.
+
+    @Override public boolean isApprovalHistoryTableSortDescending() { return false; }
+
+Next, implement the custom sort by overriding the method `getApprovalHistoryTableSortField()`. The following fields are supported to sort:
+
+- displayApprovalDate: Approval date.
+- displayUserName: Name of the creator.
+- comment: Comment.
+
+Example:
+
+    @Override public String getApprovalHistoryTableSortField() { return "displayUserName"; }
