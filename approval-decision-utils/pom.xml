@@ -10,7 +10,7 @@
   </parent>
   <groupId>com.axonivy.utils.approvaldecision</groupId>
   <artifactId>approval-decision-utils</artifactId>
-  <version>12.0.4-SNAPSHOT</version>
+  <version>13.1.1-SNAPSHOT</version>
   <packaging>iar</packaging>
   <properties>
     <ivy.engine.version>12.0.0</ivy.engine.version>
@@ -21,7 +21,7 @@
     <dependency>
       <groupId>org.hibernate</groupId>
       <artifactId>hibernate-jpamodelgen</artifactId>
-      <version>5.4.33.Final</version>
+      <version>7.0.6.Final</version>
       <scope>provided</scope>
     </dependency>
     <dependency>
