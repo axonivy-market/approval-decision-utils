@@ -12,15 +12,11 @@
   <artifactId>approval-decision-utils-demo</artifactId>
   <version>13.1.1-SNAPSHOT</version>
   <packaging>iar</packaging>
-  <properties>
-    <ivy.engine.version>12.0.0</ivy.engine.version>
-    <project.build.plugin.version>12.0.0</project.build.plugin.version>
-  </properties>
   <dependencies>
     <dependency>
       <groupId>org.hibernate</groupId>
       <artifactId>hibernate-jpamodelgen</artifactId>
-      <version>7.0.6.Final</version>
+      <version>5.4.33.Final</version>
       <scope>provided</scope>
     </dependency>
     <dependency>
@@ -84,7 +80,6 @@
           </execution>
         </executions>
         <configuration>
-          <ivyVersion>${ivy.engine.version}</ivyVersion>
           <compilerOptions>
             <compilerOption>-proc:none</compilerOption>
           </compilerOptions>
@@ -92,7 +87,6 @@
       </plugin>
       <plugin>
         <artifactId>maven-clean-plugin</artifactId>
-        <version>3.1.0</version>
         <configuration>
           <filesets>
             <fileset>

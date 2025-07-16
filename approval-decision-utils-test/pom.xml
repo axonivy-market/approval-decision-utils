@@ -12,18 +12,7 @@
   <artifactId>approval-decision-utils-test</artifactId>
   <version>13.1.1-SNAPSHOT</version>
   <packaging>iar-integration-test</packaging>
-  <properties>
-    <ivy.engine.version>12.0.0</ivy.engine.version>
-    <tester.version>12.0.1</tester.version>
-    <project.build.plugin.version>12.0.0</project.build.plugin.version>
-  </properties>
   <dependencies>
-    <dependency>
-      <groupId>com.axonivy.utils.approvaldecision</groupId>
-      <artifactId>approval-decision-utils</artifactId>
-      <version>${project.version}</version>
-      <type>iar</type>
-    </dependency>
     <dependency>
       <groupId>com.axonivy.utils.approvaldecision</groupId>
       <artifactId>approval-decision-utils-demo</artifactId>
@@ -86,7 +75,6 @@
       </plugin>
       <plugin>
         <artifactId>maven-surefire-plugin</artifactId>
-        <version>3.0.0-M4</version>
         <executions>
           <execution>
             <id>default-test</id>
@@ -106,7 +94,7 @@
         <configuration>
           <testFailureIgnore>true</testFailureIgnore>
           <argLine>-Dtest.engine.url=${test.engine.url}
-						-Dtest.engine.app=approvaldecisionutilstest</argLine>
+            -Dtest.engine.app=approvaldecisionutilstest</argLine>
         </configuration>
       </plugin>
     </plugins>
