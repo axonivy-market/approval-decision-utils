@@ -5,11 +5,9 @@
   "isBusinessCaseData" : false,
   "fields" : [ {
     "name" : "bean",
-    "type" : "com.axonivy.utils.approvaldecision.demo.managedbean.TicketProcessBean",
-    "modifiers" : [ "PERSISTENT" ]
+    "type" : "com.axonivy.utils.approvaldecision.demo.managedbean.TicketProcessBean"
   }, {
     "name" : "decisionResult",
-    "type" : "String",
-    "modifiers" : [ "PERSISTENT" ]
+    "type" : "String"
   } ]
 }
