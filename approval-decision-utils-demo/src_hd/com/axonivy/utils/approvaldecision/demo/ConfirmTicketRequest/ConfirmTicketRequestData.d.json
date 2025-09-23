@@ -1,0 +1,13 @@
+{
+  "$schema" : "https://json-schema.axonivy.com/data-class/12.0.0/data-class.json",
+  "simpleName" : "ConfirmTicketRequestData",
+  "namespace" : "com.axonivy.utils.approvaldecision.demo.ConfirmTicketRequest",
+  "isBusinessCaseData" : false,
+  "fields" : [ {
+    "name" : "bean",
+    "type" : "com.axonivy.utils.approvaldecision.demo.managedbean.TicketProcessBean"
+  }, {
+    "name" : "decisionResult",
+    "type" : "String"
+  } ]
+}

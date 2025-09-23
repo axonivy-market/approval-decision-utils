@@ -10,51 +10,52 @@
 <cc:interface componentType="IvyComponent">
 
 	<!-- Common attributes -->
-	<cc:attribute name="managedBean" />
+	<cc:attribute name="managedBean" type="com.axonivy.utils.approvaldecision.managedbean.AbstractApprovalDecisionBean"
+		required="true" shortDescription="A bean extends class 'com.axonivy.utils.approvaldecision.managedbean.AbstractApprovalDecisionBean'"/>
 	<cc:attribute name="validatorId" default="approvalDecisionValidator" />
 
-	<cc:attribute name="isReadOnly" type="java.lang.Boolean" default="false" />
+	<cc:attribute name="isReadOnly" type="java.lang.Boolean" default="false" shortDescription=""/>
 	<cc:attribute name="fieldsetToggleable" type="java.lang.Boolean" default="false" />
 	<cc:attribute name="fieldsetLegend" type="java.lang.String" default="Approval decision" />
 	<cc:attribute name="fieldsetStyleClass" />
 
 	<cc:attribute name="headline" />
-	<cc:attribute name="headlinePanelStyleClass" />
-	<cc:attribute name="headlineStyleClass" default="p-text-bold" />
+	<cc:attribute name="headlinePanelStyleClass"/>
+	<cc:attribute name="headlineStyleClass" default="font-bold" shortDescription="Style class of component headline. Default is 'font-bold'"/>
 
 	<cc:attribute name="helpText" />
 	<cc:attribute name="helpTextPanelStyleClass" />
 	<cc:attribute name="helpTextStyleClass" />
 
 	<!-- Decision attributes -->
-	<cc:attribute name="decisionRequired" type="java.lang.Boolean" default="true" />
+	<cc:attribute name="decisionRequired" type="java.lang.Boolean" default="true" shortDescription="Marks decision selection as required. Default is true."/>
 	<cc:attribute name="decisionRequiredMessage" default="#{ivy.cms.co('/Labels/RequiredFieldMessage')}" />
-	<cc:attribute name="decisionRendered" type="java.lang.Boolean" default="true" />
-	<cc:attribute name="decisionDisable" type="java.lang.Boolean" default="false" />
-	<cc:attribute name="decisionLabel" default="Decision" />
+	<cc:attribute name="decisionRendered" type="java.lang.Boolean" default="true" shortDescription="Render the decision options. Default is true."/>
+	<cc:attribute name="decisionDisable" type="java.lang.Boolean" default="false" shortDescription="Disable the selection of decision options. Default is false."/>
+	<cc:attribute name="decisionLabel" default="Decision" shortDescription="Label for decision options. Default is 'Decision'"/>
 	<cc:attribute name="decisionPanelStyleClass" />
-	<cc:attribute name="listenerOnDecisionAction" />
+	<cc:attribute name="listenerOnDecisionAction" method-signature="void action()" shortDescription="Method action when select a decision option. Default is the managed bean's onChangeDecision()."/>
 	<cc:attribute name="componentToUpdateOnDecision" default="@this" />
 
 	<!-- Confirmation attributes -->
-	<cc:attribute name="confirmationRequired" type="java.lang.Boolean" default="false" />
+	<cc:attribute name="confirmationRequired" type="java.lang.Boolean" default="false" shortDescription="Marks confirmation selection as required. Default is false."/>
 	<cc:attribute name="confirmationRequiredMessage" default="#{ivy.cms.co('/Labels/RequiredFieldMessage')}" />
-	<cc:attribute name="confirmationVisible" type="java.lang.Boolean" default="false" />
+	<cc:attribute name="confirmationVisible" type="java.lang.Boolean" default="false" shortDescription="Render the confirmation options. Default is false."/>
 	<cc:attribute name="confirmationDisabled" type="java.lang.Boolean" default="false" />
-	<cc:attribute name="confirmationLabel" default="Confirmation" />
+	<cc:attribute name="confirmationLabel" default="Confirmation" shortDescription="Label for confirmation options. Default is 'Confirmation'"/>
 	<cc:attribute name="confirmationPanelStyleClass" />
-	<cc:attribute name="listenerOnConfirmationAction" />
+	<cc:attribute name="listenerOnConfirmationAction"/>
 	<cc:attribute name="componentToUpdateOnConfirmation" default="@this" />
 
 	<!-- Comment attributes -->
-	<cc:attribute name="commentRequired" type="java.lang.Boolean" default="false" />
+	<cc:attribute name="commentRequired" type="java.lang.Boolean" default="false" shortDescription="Marks comment input as required. Default is false." />
 	<cc:attribute name="commentRequiredMessage" default="#{ivy.cms.co('/Labels/RequiredFieldMessage')}" />
-	<cc:attribute name="commentRendered" type="java.lang.Boolean" default="true" />
-	<cc:attribute name="decisionCommentLabel" default="#{ivy.cms.co('/Labels/Comment')}" />
+	<cc:attribute name="commentRendered" type="java.lang.Boolean" default="true" shortDescription="Render the comment input. Default is true." />
+	<cc:attribute name="decisionCommentLabel" default="#{ivy.cms.co('/Labels/Comment')}"  shortDescription="Label for comment." />
 	<cc:attribute name="commentPanelStyleClass" />
 
 	<!-- Approval history attribute -->
-	<cc:attribute name="approvalHistoryRendered" type="java.lang.Boolean" default="true" />
+	<cc:attribute name="approvalHistoryRendered" type="java.lang.Boolean" default="true" shortDescription="Render the approval history table. Default is true." />
 	<cc:attribute name="approvalHistoryPanelStyleClass" />
 	<cc:attribute name="approvalHistoryLabel" default="#{ivy.cms.co('/Labels/ApprovalHistory')}" />
 	<cc:attribute name="approvalHistoryAuthorStyleClass" />
@@ -98,7 +99,7 @@
 		<h:panelGroup id="decision-panel" layout="block"
 			styleClass="formgrid grid align-items-baseline ui-fluid #{cc.attrs.decisionPanelStyleClass}"
 			rendered="#{cc.attrs.decisionRendered}">
-			<div class="field col-12 md:col-2 p-text-left p-text-md-right">
+			<div class="field col-12 md:col-2 text-left md:text-right">
 				<p:outputLabel id="decision-label" for="decision-options"
 					value="#{cc.attrs.decisionLabel}">
 					<c:if test="#{cc.attrs.decisionRequired}">
@@ -111,12 +112,14 @@
 					value="#{managedBean.approvalHistory.decision}" layout="grid"
 					columns="1" requiredMessage="#{cc.attrs.decisionRequiredMessage}"
 					disabled="#{cc.attrs.decisionDisable}">
-					<f:selectItems value="#{managedBean.decisions}" var="decision"
-						itemValue="#{decision}"
+					<f:selectItems value="#{cc.attrs.managedBean.decisions}" var="decision"
+						itemValue="#{decision.name()}"
 						itemLabel="#{managedBean.getDecisionLabel(decision)}" />
 					<f:validator validatorId="#{cc.attrs.validatorId}"
 						disabled="#{!cc.attrs.decisionRequired}" />
-					<p:ajax listener="#{cc.attrs.listenerOnDecisionAction}"
+					<p:ajax
+						disabled="#{cc.attrs.listenerOnDecisionAction == null}" 
+						listener="#{cc.attrs.listenerOnDecisionAction}"
 						update="#{cc.attrs.componentToUpdateOnDecision}" process="@this"
 						partialSubmit="true" global="false" />
 				</p:selectOneRadio>
@@ -131,7 +134,7 @@
 		<h:panelGroup id="confirm-panel" layout="block"
 			styleClass="formgrid grid align-items-baseline ui-fluid #{cc.attrs.confirmationPanelStyleClass}"
 			rendered="#{(not cc.attrs.isReadOnly or cc.attrs.confirmationVisible) and managedBean.confirmations ne null and managedBean.confirmations.size() > 0}">
-			<div class="field col-12 md:col-2 p-text-left p-text-md-right">
+			<div class="field col-12 md:col-2 text-left md:text-right">
 				<p:outputLabel id="confirmation-label" for="confirmation-options"
 					value="#{cc.attrs.confirmationLabel}">
 					<c:if test="#{cc.attrs.confirmationRequired}">
@@ -145,7 +148,7 @@
 					columns="1" disabled="#{cc.attrs.confirmationDisabled}"
 					requiredMessage="#{cc.attrs.confirmationRequiredMessage}">
 					<f:selectItems value="#{managedBean.confirmations}"
-						var="confirmation" itemValue="#{confirmation}"
+						var="confirmation" itemValue="#{confirmation.name()}"
 						itemLabel="#{managedBean.getConfirmationLabel(confirmation)}" />
 					<f:attribute name="decisionBean" value="#{cc.attrs.managedBean}" />
 					<f:validator validatorId="#{cc.attrs.validatorId}"
@@ -162,7 +165,7 @@
 		<h:panelGroup id="comment-panel" layout="block"
 			styleClass="formgrid grid align-items-baseline ui-fluid #{cc.attrs.commentPanelStyleClass}"
 			rendered="#{cc.attrs.commentRendered}">
-			<div class="field col-12 md:col-2 p-text-left p-text-md-right">
+			<div class="field col-12 md:col-2 text-left md:text-right">
 				<p:outputLabel id="decision-comment-label" for="decision-comment"
 					value="#{cc.attrs.decisionCommentLabel}">
 					<c:if test="#{cc.attrs.commentRequired}">
@@ -194,7 +197,7 @@
 		<h:panelGroup id="approval-history-table-panel" layout="block"
 			styleClass="formgrid grid align-items-baseline ui-fluid #{cc.attrs.approvalHistoryPanelStyleClass}"
 			rendered="#{cc.attrs.approvalHistoryRendered}">
-			<div class="field col-12 md:col-2 p-text-left p-text-md-right">
+			<div class="field col-12 md:col-2 text-left md:text-right">
 				<p:outputLabel id="approval-history-label"
 					for="approval-history-table"
 					value="#{cc.attrs.approvalHistoryLabel}" />

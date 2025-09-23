@@ -1,16 +1,12 @@
 package com.axonivy.utils.approvaldecision.demo.dao;
 
-import java.util.List;
-
-import org.apache.commons.collections4.CollectionUtils;
-import org.hibernate.Hibernate;
-
 import com.axonivy.utils.approvaldecision.demo.entities.TicketRequest;
-import com.axonivy.utils.approvaldecision.demo.entities.TicketRequest_;
-import com.axonivy.utils.persistence.dao.AuditableDAO;
-import com.axonivy.utils.persistence.dao.CriteriaQueryContext;
+import com.axonivy.utils.approvaldecision.repository.service.BaseRepository;
 
-public class TicketRequestDAO extends AuditableDAO<TicketRequest_, TicketRequest> implements BaseDAO {
+import ch.ivyteam.ivy.environment.Ivy;
+import ch.ivyteam.ivy.workflow.businesscase.IBusinessCase;
+
+public class TicketRequestDAO extends BaseRepository<TicketRequest> {
 
 	private static final TicketRequestDAO INSTANCE = new TicketRequestDAO();
 
@@ -24,18 +20,8 @@ public class TicketRequestDAO extends AuditableDAO<TicketRequest_, TicketRequest
 	}
 
 	public TicketRequest findByCaseId(Long caseId) {
-		TicketRequest request = null;
-		try (CriteriaQueryContext<TicketRequest> query = initializeQuery();) {
-			query.whereEq(TicketRequest_.caseId, caseId);
-			List<TicketRequest> results = findByCriteria(query);
-
-			if (CollectionUtils.isNotEmpty(results)) {
-				request = results.get(0);
-				Hibernate.initialize(request.getApprovalHistories());
-			}
-
-			return request;
-		}
+		IBusinessCase businessCase = Ivy.wf().findCase(caseId).getBusinessCase();
+		TicketRequest request = Ivy.repo().find(businessCase, getType());
+		return request;
 	}
-
 }

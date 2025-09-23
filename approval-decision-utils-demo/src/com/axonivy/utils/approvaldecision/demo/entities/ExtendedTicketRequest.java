@@ -1,11 +1,15 @@
 package com.axonivy.utils.approvaldecision.demo.entities;
 
+import com.axonivy.utils.approvaldecision.repository.bean.BaseRequest;
+
 import ch.ivyteam.ivy.business.data.store.context.BusinessCaseData;
 import ch.ivyteam.ivy.environment.Ivy;
 
+/**
+ * ExtendedTicketRequest with {@link CustomApprovalHistory}
+ */
 @BusinessCaseData
-public class TicketRequest {
-
+public class ExtendedTicketRequest extends BaseRequest<CustomApprovalHistory> {
 	private String forwardToMail;
 
 	private Long caseId;
@@ -79,4 +83,5 @@ public class TicketRequest {
 	public String getSessionUsername() {
 		return Ivy.session().getSessionUserName();
 	}
+	
 }
