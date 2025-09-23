@@ -1,0 +1,4 @@
+ExtendedReviewTicketRequestData #class
+com.axonivy.utils.approvaldecision.demo.extended.ExtendedReviewTicketRequest #namespace
+bean com.axonivy.utils.approvaldecision.demo.managedbean.ExtendedTicketProcessBean #field
+decisionResult String #field

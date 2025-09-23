@@ -1,0 +1,4 @@
+ResultTicketRequestData #class
+com.axonivy.utils.approvaldecision.demo.ResultTicketRequest #namespace
+bean com.axonivy.utils.approvaldecision.demo.managedbean.TicketProcessBean #field
+bean PERSISTENT #fieldModifier

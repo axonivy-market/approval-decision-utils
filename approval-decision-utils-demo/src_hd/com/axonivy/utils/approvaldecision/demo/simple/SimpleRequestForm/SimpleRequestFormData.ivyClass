@@ -1,0 +1,3 @@
+SimpleRequestFormData #class
+com.axonivy.utils.approvaldecision.demo.simple.SimpleRequestForm #namespace
+bean com.axonivy.utils.approvaldecision.managedbean.DefaultApprovalDecisionBean #field

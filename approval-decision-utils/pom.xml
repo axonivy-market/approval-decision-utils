@@ -9,7 +9,6 @@
 	<properties>
 		<ivy.engine.version>10.0.18</ivy.engine.version>
 		<project.build.plugin.version>10.0.16</project.build.plugin.version>
-		<axonivy.persistence.version>10.0.4</axonivy.persistence.version>
 	</properties>
 
 	<repositories>
@@ -21,19 +20,6 @@
 			<url>https://maven.axonivy.com</url>
 		</repository>
 	</repositories>
-	<dependencies>
-		<dependency>
-			<groupId>org.hibernate</groupId>
-			<artifactId>hibernate-jpamodelgen</artifactId>
-			<version>5.4.33.Final</version>
-			<scope>provided</scope>
-		</dependency>
-		<dependency>
-			<groupId>com.axonivy.utils.persistence</groupId>
-			<artifactId>persistence-utils</artifactId>
-			<version>${axonivy.persistence.version}</version>
-		</dependency>
-	</dependencies>
 	<pluginRepositories>
 		<pluginRepository>
 			<id>sonatype</id>
@@ -52,30 +38,6 @@
 				<artifactId>project-build-plugin</artifactId>
 				<version>${project.build.plugin.version}</version>
 				<extensions>true</extensions>
-				<executions>
-					<execution>
-						<id>annotation-proc</id>
-						<phase>generate-sources</phase>
-						<goals>
-							<goal>compileProject</goal>
-						</goals>
-						<configuration>
-							<compilerOptions>
-								<compilerOption>-ApersistenceXml=${basedir}/src/META-INF/persistence.xml</compilerOption>
-								<compilerOption>-s</compilerOption>
-								<compilerOption>${basedir}/src_generated</compilerOption>
-								<compilerOption>-proc:only</compilerOption>
-							</compilerOptions>
-							<skipScriptValidation>true</skipScriptValidation>
-						</configuration>
-					</execution>
-				</executions>
-				<configuration>
-					<ivyVersion>${ivy.engine.version}</ivyVersion>
-					<compilerOptions>
-						<compilerOption>-proc:none</compilerOption>
-					</compilerOptions>
-				</configuration>
 			</plugin>
 		</plugins>
 	</build>
