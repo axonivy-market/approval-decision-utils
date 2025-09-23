@@ -5,8 +5,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 import com.axonivy.utils.approvaldecision.demo.contentstate.TicketProcessContentState;
-import com.axonivy.utils.approvaldecision.demo.dao.TicketRequestDAO;
-import com.axonivy.utils.approvaldecision.demo.entities.TicketRequest;
+import com.axonivy.utils.approvaldecision.demo.dao.CompositeTicketRequestDAO;
+import com.axonivy.utils.approvaldecision.demo.entities.CompositeTicketRequest;
 import com.axonivy.utils.approvaldecision.demo.enums.Department;
 import com.axonivy.utils.approvaldecision.demo.enums.ProcessStep;
 import com.axonivy.utils.approvaldecision.demo.enums.TicketProcessApprovalConfirmation;
@@ -15,26 +15,29 @@ import com.axonivy.utils.approvaldecision.demo.utils.TicketProcessUtils;
 
 import ch.ivyteam.ivy.environment.Ivy;
 
-public class TicketProcessBean {
+/**
+ * Bean for CompositeTicketRequest
+ */
+public class CompositeTicketProcessBean {
 
-	private TicketRequest request;
-	private TicketApprovalDecisionBean approvalDecisionBean;
+	private CompositeTicketRequest request;
+	private CompositeTicketRequestBean approvalDecisionBean;
 	private TicketProcessContentState contentState;
 	private Map<String, String> departmentMails;
 
 	private ProcessStep processStep;
 
-	public TicketProcessBean(ProcessStep processStep) {
+	public CompositeTicketProcessBean(ProcessStep processStep) {
 		this.processStep = processStep;
 		init();
 	}
 
 	private void init() {
 		Long caseId = Ivy.wfCase().getId();
-		request = TicketRequestDAO.getInstance().findByCaseId(caseId);
+		request = CompositeTicketRequestDAO.getInstance().findByCaseId(caseId);
 
 		if (request == null) {
-			request = new TicketRequest();
+			request = new CompositeTicketRequest();
 			request.setCaseId(caseId);
 			initTestRequestData();
 		}
@@ -42,22 +45,22 @@ public class TicketProcessBean {
 		contentState = new TicketProcessContentState();
 
 		if (processStep == ProcessStep.REQUEST_TICKET) {
-			approvalDecisionBean = new TicketApprovalDecisionBean(request,
+			approvalDecisionBean = new CompositeTicketRequestBean(request,
 					TicketProcessApprovalDecision.getRequestApprovalDecision(), null);
 			contentState.initRequestTicketContentState();
 			initForwardEmail();
 			onChangeDecision();
 		} else if (processStep == ProcessStep.REVIEW_TICKET) {
-			approvalDecisionBean = new TicketApprovalDecisionBean(request,
+			approvalDecisionBean = new CompositeTicketRequestBean(request,
 					TicketProcessApprovalDecision.getReviewApprovalDecision(), null);
 			contentState.initReviewTicketContentState();
 		} else if (processStep == ProcessStep.CONFIRM_TICKET) {
-			approvalDecisionBean = new TicketApprovalDecisionBean(request,
+			approvalDecisionBean = new CompositeTicketRequestBean(request,
 					TicketProcessApprovalDecision.getConfirmApprovalDecision(),
 					TicketProcessApprovalConfirmation.getConfirmApprovalConfirmation());
 			contentState.initConfirmTicketContentState();
 		} else {
-			approvalDecisionBean = new TicketApprovalDecisionBean(request, null, null);
+			approvalDecisionBean = new CompositeTicketRequestBean(request, null, null);
 			contentState.initResultTicketContentState();
 		}
 	}
@@ -78,8 +81,9 @@ public class TicketProcessBean {
 	}
 
 	private void handleSaving() {
-		TicketRequest saved = TicketRequestDAO.getInstance().save(this.request);
-		setRequest(saved);
+		//TODO duplicated save
+//		CompositeTicketRequest saved = CompositeTicketRequestDAO.getInstance().save(this.request);
+//		setRequest(saved);
 	}
 
 	public void save() {
@@ -109,19 +113,19 @@ public class TicketProcessBean {
 		}
 	}
 
-	public TicketRequest getRequest() {
+	public CompositeTicketRequest getRequest() {
 		return request;
 	}
 
-	public void setRequest(TicketRequest request) {
+	public void setRequest(CompositeTicketRequest request) {
 		this.request = request;
 	}
 
-	public TicketApprovalDecisionBean getApprovalDecisionBean() {
+	public CompositeTicketRequestBean getApprovalDecisionBean() {
 		return approvalDecisionBean;
 	}
 
-	public void setApprovalDecisionBean(TicketApprovalDecisionBean approvalDecisionBean) {
+	public void setApprovalDecisionBean(CompositeTicketRequestBean approvalDecisionBean) {
 		this.approvalDecisionBean = approvalDecisionBean;
 	}
 

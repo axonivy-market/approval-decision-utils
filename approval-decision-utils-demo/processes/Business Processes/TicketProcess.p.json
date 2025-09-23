@@ -41,10 +41,11 @@
       "connect" : [
         { "id" : "f4", "to" : "f16", "via" : [ { "x" : 872, "y" : 272 }, { "x" : 312, "y" : 272 } ], "label" : {
             "name" : "return back",
-            "offset" : { "x" : -279, "y" : 54 }
+            "offset" : { "x" : -279, "y" : 46 }
           } },
         { "id" : "f15", "to" : "f2", "label" : {
-            "name" : "approve/reject"
+            "name" : "approve/reject",
+            "offset" : { "x" : -6, "y" : -10 }
           } }
       ]
     }, {
@@ -60,12 +61,13 @@
       },
       "connect" : [
         { "id" : "f18", "to" : "f9", "label" : {
-            "name" : "to reviewer"
+            "name" : "to reviewer",
+            "offset" : { "x" : 5, "y" : -10 }
           } },
         { "id" : "f11", "to" : "f3", "via" : [ { "x" : 448, "y" : 24 }, { "x" : 1456, "y" : 24 } ], "label" : {
             "name" : "forward/cancel",
             "segment" : 2.04,
-            "offset" : { "x" : -511, "y" : -6 }
+            "offset" : { "x" : -509, "y" : -15 }
           } }
       ]
     }, {

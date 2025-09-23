@@ -1,41 +1,30 @@
-package com.axonivy.utils.approvaldecision.entities;
+package com.axonivy.utils.approvaldecision.repository.bean;
 
-import java.io.Serializable;
+import java.time.Instant;
 import java.time.LocalDateTime;
 
-import javax.persistence.Column;
-import javax.persistence.MappedSuperclass;
-import javax.persistence.Transient;
+public class BaseApprovalHistory {
 
-import com.axonivy.utils.persistence.beans.AuditableEntity;
-
-@MappedSuperclass
-public abstract class BaseApprovalHistory<ID extends Serializable> extends AuditableEntity<ID> {
-
-	private static final long serialVersionUID = 1L;
-
-	@Column
 	private LocalDateTime approvalDate;
 
-	@Column
 	private String comment;
 
-	@Column
 	private String decision;
 
-	@Column
+	//TODO: transient
 	private Boolean isEditing;
 
-	@Column
 	private String selectedConfirmations;
 
-	@Transient
+	private String modifiedByUserName;
+	
+	private Instant modifiedDate;
+	//TODO: transient
 	private String displayUserName;
 
-	@Transient
+	//TODO: transient
 	private String displayApprovalDate;
-
-	@Transient
+	//TODO: transient
 	private String sortableApprovalDate;
 
 	public LocalDateTime getApprovalDate() {
@@ -68,6 +57,22 @@ public abstract class BaseApprovalHistory<ID extends Serializable> extends Audit
 
 	public void setIsEditing(Boolean isEditing) {
 		this.isEditing = isEditing;
+	}
+
+	public String getModifiedByUserName() {
+		return modifiedByUserName;
+	}
+
+	public void setModifiedByUserName(String modifiedByUserName) {
+		this.modifiedByUserName = modifiedByUserName;
+	}
+
+	public Instant getModifiedDate() {
+		return modifiedDate;
+	}
+
+	public void setModifiedDate(Instant modifiedDate) {
+		this.modifiedDate = modifiedDate;
 	}
 
 	public String getSelectedConfirmations() {
