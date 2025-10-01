@@ -6,10 +6,10 @@ import ch.ivyteam.ivy.business.data.store.context.BusinessCaseData;
 import ch.ivyteam.ivy.environment.Ivy;
 
 /**
- * CompositeTicketRequest with {@link CustomApprovalHistory}
+ * ExtendedTicketRequest with {@link CustomApprovalHistory}
  */
 @BusinessCaseData
-public class CompositeTicketRequest extends BaseRequest<CustomApprovalHistory> {
+public class ExtendedTicketRequest extends BaseRequest<CustomApprovalHistory> {
 	private String forwardToMail;
 
 	private Long caseId;

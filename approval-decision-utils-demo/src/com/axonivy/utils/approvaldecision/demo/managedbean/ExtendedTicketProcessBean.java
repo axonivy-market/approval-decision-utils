@@ -5,8 +5,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import com.axonivy.utils.approvaldecision.demo.contentstate.TicketProcessContentState;
-import com.axonivy.utils.approvaldecision.demo.dao.CompositeTicketRequestDAO;
-import com.axonivy.utils.approvaldecision.demo.entities.CompositeTicketRequest;
+import com.axonivy.utils.approvaldecision.demo.entities.ExtendedTicketRequest;
 import com.axonivy.utils.approvaldecision.demo.enums.Department;
 import com.axonivy.utils.approvaldecision.demo.enums.ProcessStep;
 import com.axonivy.utils.approvaldecision.demo.enums.TicketProcessApprovalConfirmation;
@@ -16,52 +15,48 @@ import com.axonivy.utils.approvaldecision.demo.utils.TicketProcessUtils;
 import ch.ivyteam.ivy.environment.Ivy;
 
 /**
- * Bean for CompositeTicketRequest
+ * Bean for {@link ExtendedTicketRequest}
  */
-public class CompositeTicketProcessBean {
+public class ExtendedTicketProcessBean {
 
-	private CompositeTicketRequest request;
-	private CompositeTicketRequestBean approvalDecisionBean;
+	private ExtendedTicketRequest request;
+	private ExtendTicketRequestBean approvalDecisionBean;
 	private TicketProcessContentState contentState;
 	private Map<String, String> departmentMails;
 
 	private ProcessStep processStep;
 
-	public CompositeTicketProcessBean(ProcessStep processStep) {
+	public ExtendedTicketProcessBean(ProcessStep processStep) {
 		this.processStep = processStep;
 		init();
 	}
 
 	private void init() {
-		Long caseId = Ivy.wfCase().getId();
-		request = CompositeTicketRequestDAO.getInstance().findByCaseId(caseId);
-
-		if (request == null) {
-			request = new CompositeTicketRequest();
-			request.setCaseId(caseId);
-			initTestRequestData();
-		}
-
 		contentState = new TicketProcessContentState();
-
+		Long caseId = Ivy.wfCase().getId();
+		
 		if (processStep == ProcessStep.REQUEST_TICKET) {
-			approvalDecisionBean = new CompositeTicketRequestBean(request,
+			approvalDecisionBean = new ExtendTicketRequestBean(caseId,
 					TicketProcessApprovalDecision.getRequestApprovalDecision(), null);
 			contentState.initRequestTicketContentState();
 			initForwardEmail();
 			onChangeDecision();
 		} else if (processStep == ProcessStep.REVIEW_TICKET) {
-			approvalDecisionBean = new CompositeTicketRequestBean(request,
+			approvalDecisionBean = new ExtendTicketRequestBean(caseId,
 					TicketProcessApprovalDecision.getReviewApprovalDecision(), null);
 			contentState.initReviewTicketContentState();
 		} else if (processStep == ProcessStep.CONFIRM_TICKET) {
-			approvalDecisionBean = new CompositeTicketRequestBean(request,
+			approvalDecisionBean = new ExtendTicketRequestBean(caseId,
 					TicketProcessApprovalDecision.getConfirmApprovalDecision(),
 					TicketProcessApprovalConfirmation.getConfirmApprovalConfirmation());
 			contentState.initConfirmTicketContentState();
 		} else {
-			approvalDecisionBean = new CompositeTicketRequestBean(request, null, null);
+			approvalDecisionBean = new ExtendTicketRequestBean(caseId, null, null);
 			contentState.initResultTicketContentState();
+		}
+		request = approvalDecisionBean.getRequest();
+		if(request.getId() == null) {
+			initTestRequestData();
 		}
 	}
 
@@ -80,15 +75,9 @@ public class CompositeTicketProcessBean {
 		}
 	}
 
-	private void handleSaving() {
-		//TODO duplicated save
-//		CompositeTicketRequest saved = CompositeTicketRequestDAO.getInstance().save(this.request);
-//		setRequest(saved);
-	}
-
 	public void save() {
-		approvalDecisionBean.handleApprovalHistoryBeforeSave();
-		handleSaving();
+		ExtendedTicketRequest saved = approvalDecisionBean.handleForSave();
+		setRequest(saved);
 		TicketProcessUtils.showInfo();
 	}
 
@@ -96,8 +85,8 @@ public class CompositeTicketProcessBean {
 		if (processStep == ProcessStep.CONFIRM_TICKET) {
 			approvalDecisionBean.getApprovalHistory().setDecision(TicketProcessApprovalDecision.COMPLETE.name());
 		}
-		approvalDecisionBean.handleApprovalHistoryBeforeSubmit();
-		handleSaving();
+		ExtendedTicketRequest saved = approvalDecisionBean.handleForSubmit();
+		setRequest(saved);
 	}
 
 	public void cancel() throws MalformedURLException {
@@ -113,19 +102,19 @@ public class CompositeTicketProcessBean {
 		}
 	}
 
-	public CompositeTicketRequest getRequest() {
+	public ExtendedTicketRequest getRequest() {
 		return request;
 	}
 
-	public void setRequest(CompositeTicketRequest request) {
+	public void setRequest(ExtendedTicketRequest request) {
 		this.request = request;
 	}
 
-	public CompositeTicketRequestBean getApprovalDecisionBean() {
+	public ExtendTicketRequestBean getApprovalDecisionBean() {
 		return approvalDecisionBean;
 	}
 
-	public void setApprovalDecisionBean(CompositeTicketRequestBean approvalDecisionBean) {
+	public void setApprovalDecisionBean(ExtendTicketRequestBean approvalDecisionBean) {
 		this.approvalDecisionBean = approvalDecisionBean;
 	}
 

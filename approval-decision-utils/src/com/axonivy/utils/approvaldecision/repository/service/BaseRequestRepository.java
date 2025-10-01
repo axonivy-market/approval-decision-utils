@@ -5,7 +5,21 @@ import com.axonivy.utils.approvaldecision.repository.bean.BaseRequest;
 import ch.ivyteam.ivy.environment.Ivy;
 
 public abstract class BaseRequestRepository<R extends BaseRequest<?>> extends BaseRepository<R> {
-
+	
+	protected BaseRequestRepository(Class<R> clazz) {}
+	
+	/**
+	 * Static factory method to create repository instance
+	 */
+	public static <R extends BaseRequest<?>> BaseRequestRepository<R> of(Class<R> requestType) {
+        return new BaseRequestRepository<R>(requestType) {
+            @Override
+            protected Class<R> getType() {
+                return requestType;
+            }
+        };
+    }
+	
 	public R findByCaseId(Long caseId) {
 		R request = Ivy.repo().search(getType())
 				.numberField("caseId").isEqualTo(caseId)

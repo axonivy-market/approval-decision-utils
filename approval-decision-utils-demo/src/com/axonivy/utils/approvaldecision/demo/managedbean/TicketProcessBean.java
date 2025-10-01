@@ -83,7 +83,7 @@ public class TicketProcessBean {
 	}
 
 	public void save() {
-		approvalDecisionBean.handleApprovalHistoryBeforeSave();
+		approvalDecisionBean.handleForSave();
 		handleSaving();
 		TicketProcessUtils.showInfo();
 	}
@@ -92,7 +92,7 @@ public class TicketProcessBean {
 		if (processStep == ProcessStep.CONFIRM_TICKET) {
 			approvalDecisionBean.getApprovalHistory().setDecision(TicketProcessApprovalDecision.COMPLETE.name());
 		}
-		approvalDecisionBean.handleApprovalHistoryBeforeSubmit();
+		approvalDecisionBean.handleForSubmit();
 		handleSaving();
 	}
 

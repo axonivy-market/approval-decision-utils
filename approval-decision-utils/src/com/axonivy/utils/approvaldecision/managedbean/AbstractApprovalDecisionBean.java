@@ -98,12 +98,12 @@ public abstract class AbstractApprovalDecisionBean<T extends BaseApprovalHistory
 			histories = new ArrayList<>();
 		}
 
-		setApprovalHistories(histories.stream().filter(p -> !p.getIsEditing())
+		approvalHistories = histories.stream().filter(p -> !p.getIsEditing())
 				.sorted(Comparator.comparing(BaseApprovalHistory::getApprovalDate).reversed())
-				.collect(Collectors.toList()));
-	    setApprovalHistory(histories.stream().filter(p -> p.getIsEditing()).findFirst().orElse(createApprovalHistory()));
+				.collect(Collectors.toList());
+	    approvalHistory = histories.stream().filter(p -> p.getIsEditing()).findFirst().orElse(createApprovalHistory());
 
-		getApprovalHistories().forEach(history -> {
+		approvalHistories.forEach(history -> {
 			history.setDisplayUserName(history.getModifiedByUserName());
 			history.setDisplayApprovalDate(DateUtils.getFormattedDateTime(history.getApprovalDate()));
 			history.setSortableApprovalDate(DateUtils.getSortableFormattedDateTime(history.getApprovalDate()));
@@ -146,7 +146,32 @@ public abstract class AbstractApprovalDecisionBean<T extends BaseApprovalHistory
 		}
 	}
 
-	protected void handleBeforeSave() {
+	/**
+	 * Handle decision and confirmation stuffs before save.
+	 *
+	 */
+	public R handleForSave() {
+		approvalHistory.setIsEditing(true);
+		
+		handleApprovalHistoryForSave();
+		
+		baseRequest = createRepository().save(baseRequest);
+		return baseRequest;
+	}
+
+	/**
+	 * Handle decision and confirmation stuffs before submit.
+	 *
+	 */
+	public R handleForSubmit() {
+		approvalHistory.setIsEditing(false);
+		handleApprovalHistoryForSave();
+		
+		baseRequest = createRepository().save(baseRequest);
+		return baseRequest;
+	}
+
+	private void handleApprovalHistoryForSave() {
 		if (CollectionUtils.isNotEmpty(confirmations)) {
 			handleConfirmation();
 		}
@@ -157,45 +182,18 @@ public abstract class AbstractApprovalDecisionBean<T extends BaseApprovalHistory
 		if (StringUtils.isNotBlank(approvalHistory.getDecision())
 				|| StringUtils.isNotBlank(approvalHistory.getComment())
 				|| StringUtils.isNotBlank(approvalHistory.getSelectedConfirmations())) {
-			approvalHistory.setApprovalDate(LocalDateTime.now());
-			approvalHistory.setModifiedDate(Instant.now());
-			approvalHistory.setModifiedByUserName(Ivy.session().getSessionUserName());
+			approvalHistory.setApprovalDate(LocalDateTime.now());						// set ApprovalDate
+			approvalHistory.setModifiedDate(Instant.now());								// set ModifiedDate
+			approvalHistory.setModifiedByUserName(Ivy.session().getSessionUserName());	// set UserName
 
 			baseRequest.getApprovalHistories().add(approvalHistory);
 		}
-		
-		createRepository().save(baseRequest);
-		
-		setApprovalHistory(baseRequest.getApprovalHistories().stream()
-				.filter(p -> p.getIsEditing()).findFirst().orElse(createApprovalHistory()));
 	}
-
-	/**
-	 * Handle decision and confirmation stuffs before save.
-	 *
-	 */
-	public void handleApprovalHistoryBeforeSave() {
-		approvalHistory.setIsEditing(true);
-		handleBeforeSave();
-	}
-
-	/**
-	 * Handle decision and confirmation stuffs before submit.
-	 *
-	 */
-	public void handleApprovalHistoryBeforeSubmit() {
-		approvalHistory.setIsEditing(false);
-		handleBeforeSave();
-	}
-
+	
+	@SuppressWarnings({ "rawtypes", "unchecked"})
 	protected BaseRequestRepository<R> createRepository() {
-        return new BaseRequestRepository<R>() {
-            @Override
-            @SuppressWarnings("unchecked")
-            protected Class<R> getType() {
-                return (Class<R>) getRequestType();
-            }
-        };
+		Class<? extends BaseRequest> requestType = getRequestType();
+		return BaseRequestRepository.of((Class<R>) requestType);
     }
 	
 	/**
@@ -212,6 +210,10 @@ public abstract class AbstractApprovalDecisionBean<T extends BaseApprovalHistory
 				.orElse(username);
 	}
 
+	public R getRequest() {
+		return baseRequest;
+	}
+	
 	public T getApprovalHistory() {
 		return approvalHistory;
 	}
@@ -246,10 +248,6 @@ public abstract class AbstractApprovalDecisionBean<T extends BaseApprovalHistory
 
 	public List<T> getApprovalHistories() {
 		return approvalHistories;
-	}
-
-	public void setApprovalHistories(List<T> approvalHistories) {
-		this.approvalHistories = approvalHistories;
 	}
 
 	public SortMeta getDefaultSortField() {

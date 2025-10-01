@@ -8,7 +8,7 @@
 	xmlns:c="http://java.sun.com/jsp/jstl/core">
 <h:body>
 	<ui:composition template="/layouts/frame-10.xhtml">
-		<ui:define name="title">#{ivy.cms.co('/Dialogs/com/axonivy/utils/approvaldecision/RequestTicketForm/Title')}</ui:define>
+		<ui:define name="title">#{ivy.cms.co('/Dialogs/com/axonivy/utils/approvaldecision/ConfirmTicketRequest/Title')}</ui:define>
 		<ui:define name="content">
 			<c:set var="managedBean" value="#{data.bean}" />
 			<h:form id="content-form">
@@ -17,7 +17,6 @@
 
 				<ic:com.axonivy.utils.approvaldecision.demo.component.TicketInformation
 					id="ticket-information-section" managedBean="#{managedBean}"
-					validatorId="ticketProcessValidator"
 					ticketTitleReadOnly="#{managedBean.contentState.ticketTitleReadOnly}"
 					ticketNumberReadOnly="#{managedBean.contentState.ticketNumberReadOnly}"
 					ticketTypeReadOnly="#{managedBean.contentState.ticketTypeReadOnly}"
@@ -28,52 +27,26 @@
 					ticketTypeRequired="#{managedBean.contentState.ticketTypeRequired}"
 					ticketRaiserRequired="#{managedBean.contentState.ticketRaiserRequired}"
 					ticketDescriptionRequired="#{managedBean.contentState.ticketDescriptionRequired}" />
-				<br/>
+
 				<ic:com.axonivy.utils.approvaldecision.ApprovalDecision
 					id="approval-decision"
 					managedBean="#{managedBean.approvalDecisionBean}"
 					validatorId="#{managedBean.approvalDecisionBean.validatorId}"
-					fieldsetLegend="#{ivy.cms.co('/Dialogs/com/axonivy/utils/approvaldecision/RequestTicketForm/DecisionLegend')}"
+					fieldsetLegend="#{ivy.cms.co('/Dialogs/com/axonivy/utils/approvaldecision/ConfirmTicketRequest/DecisionLegend')}"
 					fieldsetToggleable="#{true}" fieldsetStyleClass="mt-3"
-					headline="#{ivy.cms.co('/Dialogs/com/axonivy/utils/approvaldecision/RequestTicketForm/ApprovalDecisionHeadline')}"
+					headline="#{ivy.cms.co('/Dialogs/com/axonivy/utils/approvaldecision/ConfirmTicketRequest/ApprovalDecisionHeadline')}"
 					headlinePanelStyleClass="" headlineStyleClass="font-bold"
-					helpText="#{ivy.cms.co('/Dialogs/com/axonivy/utils/approvaldecision/RequestTicketForm/ApprovalDecisionHelpText')}"
+					helpText="#{ivy.cms.co('/Dialogs/com/axonivy/utils/approvaldecision/ConfirmTicketRequest/ApprovalDecisionHelpText')}"
 					helpTextPanelStyleClass="" helpTextStyleClass=""
 					decisionRendered="#{managedBean.contentState.decisionRendered}"
-					decisionDisable="#{managedBean.contentState.decisionDisable}"
 					decisionRequired="#{managedBean.contentState.decisionRequired}"
-					listenerOnDecisionAction="#{managedBean.onChangeDecision()}"
-					componentToUpdateOnDecision="approval-decision:dropdown-list-of-mails"
+					decisionDisable="#{managedBean.contentState.decisionDisable}"
+					confirmationVisible="#{managedBean.contentState.confirmationVisible}"
+					confirmationRequired="#{managedBean.contentState.confirmationRequired}"
+					componentToUpdateOnConfirmation=""
 					commentRendered="#{managedBean.contentState.commentRendered}"
 					commentRequired="#{managedBean.contentState.commentRequired}"
 					approvalHistoryRendered="#{managedBean.contentState.approvalHistoryRendered}">
-					<f:facet name="customContent">
-						<h:panelGroup id="dropdown-list-of-mails">
-							<h:panelGroup id="mail-panel" layout="block"
-								styleClass="formgrid grid align-items-baseline ui-fluid"
-								rendered="#{managedBean.contentState.showDropdownOfMails}">
-								<div class="field text-left md:text-right col-12 md:col-2">
-									<p:outputLabel for="dropdownlist-mail"
-										value="#{ivy.cms.co('/Labels/EmailAddressOfRelevantDepartment')}">
-										<span class="ui-outputlabel-rfi">*</span>
-									</p:outputLabel>
-								</div>
-								<div class="field col-12 md:col-4">
-									<p:selectOneMenu id="dropdownlist-mail"
-										value="#{managedBean.request.forwardToMail}"
-										requiredMessage="#{ivy.cms.co('/Labels/RequiredFieldMessage')}">
-										<f:selectItem itemLabel="SelectOne" itemValue="" />
-										<f:selectItems
-											value="#{managedBean.departmentMails.entrySet()}"
-											var="department" itemLabel="#{department.key}"
-											itemValue="#{department.value}" />
-										<f:validator validatorId="approvalDecisionValidator" />
-									</p:selectOneMenu>
-									<p:message for="dropdownlist-mail" />
-								</div>
-							</h:panelGroup>
-						</h:panelGroup>
-					</f:facet>
 				</ic:com.axonivy.utils.approvaldecision.ApprovalDecision>
 
 				<br />

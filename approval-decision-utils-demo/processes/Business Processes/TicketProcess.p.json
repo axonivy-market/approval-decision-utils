@@ -7,16 +7,16 @@
   "elements" : [ {
       "id" : "f0",
       "type" : "RequestStart",
-      "name" : "start.ivp",
+      "name" : "ticketRequest.ivp",
       "config" : {
-        "signature" : "start",
+        "signature" : "ticketRequest",
         "case" : {
           "name" : "Request Ticket Process",
           "description" : "Request Ticket Process"
         }
       },
       "visual" : {
-        "at" : { "x" : 96, "y" : 160 }
+        "at" : { "x" : 144, "y" : 528 }
       },
       "connect" : [
         { "id" : "f17", "to" : "f16" }
@@ -25,7 +25,7 @@
       "id" : "f1",
       "type" : "TaskEnd",
       "visual" : {
-        "at" : { "x" : 1616, "y" : 160 }
+        "at" : { "x" : 1664, "y" : 528 }
       }
     }, {
       "id" : "f7",
@@ -36,12 +36,12 @@
         }
       },
       "visual" : {
-        "at" : { "x" : 872, "y" : 160 }
+        "at" : { "x" : 952, "y" : 528 }
       },
       "connect" : [
-        { "id" : "f4", "to" : "f16", "via" : [ { "x" : 872, "y" : 272 }, { "x" : 312, "y" : 272 } ], "label" : {
+        { "id" : "f4", "to" : "f16", "via" : [ { "x" : 954, "y" : 639 }, { "x" : 376, "y" : 639 } ], "label" : {
             "name" : "return back",
-            "offset" : { "x" : -279, "y" : 46 }
+            "offset" : { "x" : -294, "y" : 36 }
           } },
         { "id" : "f15", "to" : "f2", "label" : {
             "name" : "approve/reject",
@@ -57,17 +57,17 @@
         }
       },
       "visual" : {
-        "at" : { "x" : 448, "y" : 160 }
+        "at" : { "x" : 496, "y" : 528 }
       },
       "connect" : [
         { "id" : "f18", "to" : "f9", "label" : {
             "name" : "to reviewer",
             "offset" : { "x" : 5, "y" : -10 }
           } },
-        { "id" : "f11", "to" : "f3", "via" : [ { "x" : 448, "y" : 24 }, { "x" : 1456, "y" : 24 } ], "label" : {
+        { "id" : "f11", "to" : "f3", "via" : [ { "x" : 496, "y" : 391 }, { "x" : 1504, "y" : 391 } ], "label" : {
             "name" : "forward/cancel",
             "segment" : 2.04,
-            "offset" : { "x" : -509, "y" : -15 }
+            "offset" : { "x" : -887, "y" : -15 }
           } }
       ]
     }, {
@@ -83,8 +83,8 @@
         }
       },
       "visual" : {
-        "at" : { "x" : 1176, "y" : 159 },
-        "size" : { "width" : 130, "height" : 65 }
+        "at" : { "x" : 1247, "y" : 527 },
+        "size" : { "width" : 177, "height" : 65 }
       },
       "connect" : [
         { "id" : "f5", "to" : "f3" }
@@ -108,8 +108,8 @@
         }
       },
       "visual" : {
-        "at" : { "x" : 720, "y" : 160 },
-        "size" : { "width" : 144 }
+        "at" : { "x" : 780, "y" : 529 },
+        "size" : { "width" : 168, "height" : 62 }
       },
       "connect" : [
         { "id" : "f6", "to" : "f7" }
@@ -133,8 +133,8 @@
         }
       },
       "visual" : {
-        "at" : { "x" : 312, "y" : 160 },
-        "size" : { "width" : 128 }
+        "at" : { "x" : 372, "y" : 529 },
+        "size" : { "width" : 152, "height" : 62 }
       },
       "connect" : [
         { "id" : "f13", "to" : "f10" }
@@ -152,11 +152,222 @@
         }
       },
       "visual" : {
-        "at" : { "x" : 1456, "y" : 160 },
-        "size" : { "width" : 128 }
+        "at" : { "x" : 1520, "y" : 529 },
+        "size" : { "width" : 160, "height" : 62 }
       },
       "connect" : [
         { "id" : "f8", "to" : "f1" }
+      ]
+    }, {
+      "id" : "f12",
+      "type" : "RequestStart",
+      "name" : "extendedTicketRequest.ivp",
+      "config" : {
+        "signature" : "extendedTicketRequest",
+        "case" : {
+          "name" : "Request Ticket Process",
+          "description" : "Request Ticket Process"
+        }
+      },
+      "visual" : {
+        "at" : { "x" : 144, "y" : 824 }
+      },
+      "connect" : [
+        { "id" : "f29", "to" : "f19" }
+      ]
+    }, {
+      "id" : "f14",
+      "type" : "Alternative",
+      "config" : {
+        "conditions" : {
+          "f32" : "in.decision.equalsIgnoreCase(\"SEND_TO_REVIEWER\")"
+        }
+      },
+      "visual" : {
+        "at" : { "x" : 496, "y" : 824 }
+      },
+      "connect" : [
+        { "id" : "f32", "to" : "f20", "label" : {
+            "name" : "to reviewer",
+            "offset" : { "x" : 5, "y" : -10 }
+          } },
+        { "id" : "f25", "to" : "f23", "via" : [ { "x" : 496, "y" : 687 }, { "x" : 1504, "y" : 687 } ], "label" : {
+            "name" : "forward/cancel",
+            "segment" : 2.04,
+            "offset" : { "x" : -887, "y" : -15 }
+          } }
+      ]
+    }, {
+      "id" : "f19",
+      "type" : "UserTask",
+      "name" : "RequestTicketForm",
+      "config" : {
+        "dialog" : "com.axonivy.utils.approvaldecision.demo.extended.ExtendedRequestTicketForm:start()",
+        "task" : {
+          "name" : "Step 1: Request ticket",
+          "description" : "Request ticket",
+          "skipTasklist" : true
+        },
+        "output" : {
+          "map" : {
+            "out" : "in",
+            "out.decision" : "result.decisionResult"
+          }
+        }
+      },
+      "visual" : {
+        "at" : { "x" : 372, "y" : 825 },
+        "size" : { "width" : 152, "height" : 62 }
+      },
+      "connect" : [
+        { "id" : "f33", "to" : "f14" }
+      ]
+    }, {
+      "id" : "f20",
+      "type" : "UserTask",
+      "name" : "ReviewTicketRequest",
+      "config" : {
+        "dialog" : "com.axonivy.utils.approvaldecision.demo.extended.ExtendedReviewTicketRequest:start()",
+        "task" : {
+          "name" : "Step 2: Review ticket request",
+          "description" : "Review ticket request",
+          "skipTasklist" : true
+        },
+        "output" : {
+          "map" : {
+            "out" : "in",
+            "out.decision" : "result.decisionResult"
+          }
+        }
+      },
+      "visual" : {
+        "at" : { "x" : 780, "y" : 825 },
+        "size" : { "width" : 168, "height" : 62 }
+      },
+      "connect" : [
+        { "id" : "f27", "to" : "f21" }
+      ]
+    }, {
+      "id" : "f21",
+      "type" : "Alternative",
+      "config" : {
+        "conditions" : {
+          "f30" : "in.decision.equalsIgnoreCase(\"RETURN_BACK_TO_REQUESTER\")"
+        }
+      },
+      "visual" : {
+        "at" : { "x" : 952, "y" : 824 }
+      },
+      "connect" : [
+        { "id" : "f30", "to" : "f19", "via" : [ { "x" : 954, "y" : 935 }, { "x" : 362, "y" : 935 } ], "label" : {
+            "name" : "return back",
+            "offset" : { "x" : -286, "y" : 36 }
+          } },
+        { "id" : "f26", "to" : "f22", "label" : {
+            "name" : "approve/reject",
+            "offset" : { "x" : -6, "y" : -10 }
+          } }
+      ]
+    }, {
+      "id" : "f22",
+      "type" : "UserTask",
+      "name" : "ConfirmTicketRequest",
+      "config" : {
+        "dialog" : "com.axonivy.utils.approvaldecision.demo.extended.ExtendedConfirmTicketRequest:start()",
+        "task" : {
+          "name" : "Step 3: Confirm ticket request",
+          "description" : "Confirm ticket request",
+          "skipTasklist" : true
+        }
+      },
+      "visual" : {
+        "at" : { "x" : 1247, "y" : 823 },
+        "size" : { "width" : 177, "height" : 65 }
+      },
+      "connect" : [
+        { "id" : "f28", "to" : "f23" }
+      ]
+    }, {
+      "id" : "f23",
+      "type" : "UserTask",
+      "name" : "ResultTicketRequest",
+      "config" : {
+        "dialog" : "com.axonivy.utils.approvaldecision.demo.extended.ExtendedResultTicketRequest:start()",
+        "task" : {
+          "name" : "Final step: Result ticket request",
+          "description" : "Result ticket request",
+          "skipTasklist" : true
+        }
+      },
+      "visual" : {
+        "at" : { "x" : 1520, "y" : 825 },
+        "size" : { "width" : 160, "height" : 62 }
+      },
+      "connect" : [
+        { "id" : "f31", "to" : "f24" }
+      ]
+    }, {
+      "id" : "f24",
+      "type" : "TaskEnd",
+      "visual" : {
+        "at" : { "x" : 1664, "y" : 824 }
+      }
+    }, {
+      "id" : "f34",
+      "type" : "RequestStart",
+      "name" : "simpleRequest.ivp",
+      "config" : {
+        "signature" : "simpleRequest"
+      },
+      "visual" : {
+        "at" : { "x" : 136, "y" : 208 }
+      },
+      "connect" : [
+        { "id" : "f37", "to" : "f36" }
+      ]
+    }, {
+      "id" : "f35",
+      "type" : "TaskEnd",
+      "visual" : {
+        "at" : { "x" : 944, "y" : 208 }
+      }
+    }, {
+      "id" : "f36",
+      "type" : "UserTask",
+      "name" : "RequestForm",
+      "config" : {
+        "dialog" : "com.axonivy.utils.approvaldecision.demo.simple.SimpleRequestForm:start()",
+        "task" : {
+          "name" : "Step 1: Request ticket",
+          "description" : "Request ticket",
+          "skipTasklist" : true
+        }
+      },
+      "visual" : {
+        "at" : { "x" : 384, "y" : 208 },
+        "size" : { "width" : 152, "height" : 62 }
+      },
+      "connect" : [
+        { "id" : "f38", "to" : "f39" }
+      ]
+    }, {
+      "id" : "f39",
+      "type" : "UserTask",
+      "name" : "ResultForm",
+      "config" : {
+        "dialog" : "com.axonivy.utils.approvaldecision.demo.simple.SimpleResultForm:start()",
+        "task" : {
+          "name" : "Final step: Result ticket request",
+          "description" : "Result ticket request",
+          "skipTasklist" : true
+        }
+      },
+      "visual" : {
+        "at" : { "x" : 720, "y" : 208 },
+        "size" : { "width" : 160, "height" : 62 }
+      },
+      "connect" : [
+        { "id" : "f40", "to" : "f35", "color" : "default" }
       ]
     } ]
 }

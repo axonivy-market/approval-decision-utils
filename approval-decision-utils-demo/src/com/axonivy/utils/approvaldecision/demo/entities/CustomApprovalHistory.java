@@ -3,13 +3,15 @@ package com.axonivy.utils.approvaldecision.demo.entities;
 import com.axonivy.utils.approvaldecision.repository.bean.BaseApprovalHistory;
 
 public class CustomApprovalHistory extends BaseApprovalHistory {
-	private Integer priority;
+	private String approverEmail;
 
-	public Integer getPriority() {
-		return priority;
+	public String getApproverEmail() {
+		return approverEmail;
 	}
 
-	public void setPriority(Integer priority) {
-		this.priority = priority;
+	public void setApproverEmail(String approverEmail) {
+		this.approverEmail = approverEmail;
 	}
+
+
 }

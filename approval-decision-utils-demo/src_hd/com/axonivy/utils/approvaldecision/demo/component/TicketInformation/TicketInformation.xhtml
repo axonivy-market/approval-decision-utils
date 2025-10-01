@@ -41,7 +41,7 @@
 	<p:fieldset legend="#{ivy.cms.co('/Labels/InformationLegend')}"
 		toggleable="true">
 		<div class="grid ui-g">
-			<div class="sm:col-12 md:col-4 lg:col-2 p-text-left p-text-md-right">
+			<div class="sm:col-12 md:col-4 lg:col-2 text-left md:text-right">
 				<p:outputLabel value="#{ivy.cms.co('/Labels/TicketTitle')}"
 					for="ticket-title">
 					<c:if test="#{cc.attrs.ticketTitleRequired}">
@@ -59,7 +59,7 @@
 				</p:inputText>
 				<p:message for="ticket-title" />
 			</div>
-			<div class="sm:col-12 md:col-4 lg:col-2 p-text-left p-text-md-right">
+			<div class="sm:col-12 md:col-4 lg:col-2 text-left md:text-right">
 				<p:outputLabel value="#{ivy.cms.co('/Labels/TicketNumber')}"
 					for="ticket-number">
 					<c:if test="#{cc.attrs.ticketNumberRequired}">
@@ -79,7 +79,7 @@
 			</div>
 		</div>
 		<div class="grid ui-g">
-			<div class="sm:col-12 md:col-4 lg:col-2 p-text-left p-text-md-right">
+			<div class="sm:col-12 md:col-4 lg:col-2 text-left md:text-right">
 				<p:outputLabel value="#{ivy.cms.co('/Labels/TicketType')}"
 					for="ticket-type">
 					<c:if test="#{cc.attrs.ticketTypeRequired}">
@@ -97,7 +97,7 @@
 				</p:inputText>
 				<p:message for="ticket-type" />
 			</div>
-			<div class="sm:col-12 md:col-4 lg:col-2 p-text-left p-text-md-right">
+			<div class="sm:col-12 md:col-4 lg:col-2 text-left md:text-right">
 				<p:outputLabel value="#{ivy.cms.co('/Labels/TicketRaiser')}"
 					for="ticket-raiser">
 					<c:if test="#{cc.attrs.ticketRaiserRequired}">
@@ -117,7 +117,7 @@
 			</div>
 		</div>
 		<div class="grid ui-g">
-			<div class="sm:col-12 md:col-4 lg:col-2 p-text-left p-text-md-right">
+			<div class="sm:col-12 md:col-4 lg:col-2 text-left md:text-right">
 				<p:outputLabel value="#{ivy.cms.co('/Labels/TicketDescription')}"
 					for="ticket-description">
 					<c:if test="#{cc.attrs.ticketDescriptionRequired}">

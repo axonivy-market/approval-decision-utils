@@ -34,8 +34,9 @@ public class TicketApprovalDecisionBean extends AbstractApprovalDecisionBean<Bas
 		return new BaseApprovalHistory();
 	}
 
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Override
-	protected Class<BaseRequest<BaseApprovalHistory>> getRequestType() {
+	protected Class<BaseRequest<?>> getRequestType() {
 		return (Class) BaseRequest.class;
 	}
 	

@@ -27,15 +27,15 @@
 					ticketTypeRequired="#{managedBean.contentState.ticketTypeRequired}"
 					ticketRaiserRequired="#{managedBean.contentState.ticketRaiserRequired}"
 					ticketDescriptionRequired="#{managedBean.contentState.ticketDescriptionRequired}" />
-
+				<br/>
 				<ic:com.axonivy.utils.approvaldecision.ApprovalDecision
 					id="approval-decision"
 					managedBean="#{managedBean.approvalDecisionBean}"
 					validatorId="#{managedBean.approvalDecisionBean.validatorId}"
 					fieldsetLegend="#{ivy.cms.co('/Dialogs/com/axonivy/utils/approvaldecision/ConfirmTicketRequest/DecisionLegend')}"
-					fieldsetToggleable="#{true}" fieldsetStyleClass="p-mt-3"
+					fieldsetToggleable="#{true}" fieldsetStyleClass="mt-3"
 					headline="#{ivy.cms.co('/Dialogs/com/axonivy/utils/approvaldecision/ConfirmTicketRequest/ApprovalDecisionHeadline')}"
-					headlinePanelStyleClass="" headlineStyleClass="p-text-bold"
+					headlinePanelStyleClass="" headlineStyleClass="font-bold"
 					helpText="#{ivy.cms.co('/Dialogs/com/axonivy/utils/approvaldecision/ConfirmTicketRequest/ApprovalDecisionHelpText')}"
 					helpTextPanelStyleClass="" helpTextStyleClass=""
 					decisionRendered="#{managedBean.contentState.decisionRendered}"
