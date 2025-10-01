@@ -75,7 +75,7 @@
       "type" : "UserTask",
       "name" : "ConfirmTicketRequest",
       "config" : {
-        "dialog" : "com.axonivy.utils.approvaldecision.ConfirmTicketRequest:start()",
+        "dialog" : "com.axonivy.utils.approvaldecision.demo.ConfirmTicketRequest:start()",
         "task" : {
           "name" : "Step 3: Confirm ticket request",
           "description" : "Confirm ticket request",
@@ -94,7 +94,7 @@
       "type" : "UserTask",
       "name" : "ReviewTicketRequest",
       "config" : {
-        "dialog" : "com.axonivy.utils.approvaldecision.ReviewTicketRequest:start()",
+        "dialog" : "com.axonivy.utils.approvaldecision.demo.ReviewTicketRequest:start()",
         "task" : {
           "name" : "Step 2: Review ticket request",
           "description" : "Review ticket request",
@@ -119,7 +119,7 @@
       "type" : "UserTask",
       "name" : "RequestTicketForm",
       "config" : {
-        "dialog" : "com.axonivy.utils.approvaldecision.RequestTicketForm:start()",
+        "dialog" : "com.axonivy.utils.approvaldecision.demo.RequestTicketForm:start()",
         "task" : {
           "name" : "Step 1: Request ticket",
           "description" : "Request ticket",
@@ -144,7 +144,7 @@
       "type" : "UserTask",
       "name" : "ResultTicketRequest",
       "config" : {
-        "dialog" : "com.axonivy.utils.approvaldecision.ResultTicketRequest:start()",
+        "dialog" : "com.axonivy.utils.approvaldecision.demo.ResultTicketRequest:start()",
         "task" : {
           "name" : "Final step: Result ticket request",
           "description" : "Result ticket request",

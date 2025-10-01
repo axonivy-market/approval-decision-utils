@@ -8,14 +8,14 @@
 	xmlns:c="http://java.sun.com/jsp/jstl/core">
 <h:body>
 	<ui:composition template="/layouts/frame-10.xhtml">
-		<ui:define name="title">#{ivy.cms.co('/Dialogs/com/axonivy/utils/approvaldecision/ConfirmTicketRequest/Title')}</ui:define>
+		<ui:define name="title">#{ivy.cms.co('/Dialogs/com/axonivy/utils/approvaldecision/ReviewTicketRequest/Title')}</ui:define>
 		<ui:define name="content">
 			<c:set var="managedBean" value="#{data.bean}" />
 			<h:form id="content-form">
 				<p:growl id="growl-message" showDetail="true" sticky="true"
 					for="growl-message" />
 
-				<ic:com.axonivy.utils.approvaldecision.TicketInformation
+				<ic:com.axonivy.utils.approvaldecision.demo.component.TicketInformation
 					id="ticket-information-section" managedBean="#{managedBean}"
 					ticketTitleReadOnly="#{managedBean.contentState.ticketTitleReadOnly}"
 					ticketNumberReadOnly="#{managedBean.contentState.ticketNumberReadOnly}"
@@ -32,18 +32,17 @@
 					id="approval-decision"
 					managedBean="#{managedBean.approvalDecisionBean}"
 					validatorId="#{managedBean.approvalDecisionBean.validatorId}"
-					fieldsetLegend="#{ivy.cms.co('/Dialogs/com/axonivy/utils/approvaldecision/ConfirmTicketRequest/DecisionLegend')}"
+					fieldsetLegend="#{ivy.cms.co('/Dialogs/com/axonivy/utils/approvaldecision/ReviewTicketRequest/DecisionLegend')}"
 					fieldsetToggleable="#{true}" fieldsetStyleClass="p-mt-3"
-					headline="#{ivy.cms.co('/Dialogs/com/axonivy/utils/approvaldecision/ConfirmTicketRequest/ApprovalDecisionHeadline')}"
+					headline="#{ivy.cms.co('/Dialogs/com/axonivy/utils/approvaldecision/ReviewTicketRequest/ApprovalDecisionHeadline')}"
 					headlinePanelStyleClass="" headlineStyleClass="p-text-bold"
-					helpText="#{ivy.cms.co('/Dialogs/com/axonivy/utils/approvaldecision/ConfirmTicketRequest/ApprovalDecisionHelpText')}"
+					helpText="#{ivy.cms.co('/Dialogs/com/axonivy/utils/approvaldecision/ReviewTicketRequest/ApprovalDecisionHelpText')}"
 					helpTextPanelStyleClass="" helpTextStyleClass=""
 					decisionRendered="#{managedBean.contentState.decisionRendered}"
 					decisionRequired="#{managedBean.contentState.decisionRequired}"
 					decisionDisable="#{managedBean.contentState.decisionDisable}"
 					confirmationVisible="#{managedBean.contentState.confirmationVisible}"
 					confirmationRequired="#{managedBean.contentState.confirmationRequired}"
-					componentToUpdateOnConfirmation=""
 					commentRendered="#{managedBean.contentState.commentRendered}"
 					commentRequired="#{managedBean.contentState.commentRequired}"
 					approvalHistoryRendered="#{managedBean.contentState.approvalHistoryRendered}">

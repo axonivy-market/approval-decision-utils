@@ -3,7 +3,7 @@
   "id" : "18BA88A52A9D4B3C",
   "kind" : "HTML_DIALOG",
   "config" : {
-    "data" : "com.axonivy.utils.approvaldecision.ReviewTicketRequest.ReviewTicketRequestData"
+    "data" : "com.axonivy.utils.approvaldecision.demo.ReviewTicketRequest.ReviewTicketRequestData"
   },
   "elements" : [ {
       "id" : "f0",
