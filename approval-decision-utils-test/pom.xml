@@ -6,9 +6,9 @@
 	<version>12.0.4-SNAPSHOT</version>
 	<packaging>iar-integration-test</packaging>
 	<properties>
-		<ivy.engine.version>12.0.0</ivy.engine.version>
-		<project.build.plugin.version>12.0.0</project.build.plugin.version>
-		<tester.version>12.0.1</tester.version>
+		<ivy.engine.version>12.0.8</ivy.engine.version>
+		<project.build.plugin.version>12.0.8</project.build.plugin.version>
+		<tester.version>12.0.2</tester.version>
 	</properties>
 	<pluginRepositories>
 		<pluginRepository>
