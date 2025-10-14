@@ -66,7 +66,7 @@ public class ExtendTicketRequestBean extends AbstractApprovalDecisionBean<Custom
 	@Override
 	public ExtendedTicketRequest handleForSubmit() {
 		setCustomApprovalHistory();
-		return super.handleForSave();
+		return super.handleForSubmit();
 	}
 
 	/*
