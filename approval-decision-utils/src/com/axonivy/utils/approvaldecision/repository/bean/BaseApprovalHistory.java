@@ -11,7 +11,7 @@ public class BaseApprovalHistory {
 
 	private String decision;
 
-	//TODO: transient
+	// transient
 	private Boolean isEditing;
 
 	private String selectedConfirmations;
@@ -19,12 +19,14 @@ public class BaseApprovalHistory {
 	private String modifiedByUserName;
 	
 	private Instant modifiedDate;
-	//TODO: transient
+	
+	// transient
 	private String displayUserName;
 
-	//TODO: transient
+	// transient
 	private String displayApprovalDate;
-	//TODO: transient
+	
+	// transient
 	private String sortableApprovalDate;
 
 	public LocalDateTime getApprovalDate() {

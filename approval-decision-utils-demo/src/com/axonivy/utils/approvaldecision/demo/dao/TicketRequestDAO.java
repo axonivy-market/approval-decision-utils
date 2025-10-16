@@ -18,11 +18,10 @@ public class TicketRequestDAO extends BaseRepository<TicketRequest> {
 	protected Class<TicketRequest> getType() {
 		return TicketRequest.class;
 	}
-	
+
 	public TicketRequest findByCaseId(Long caseId) {
 		IBusinessCase businessCase = Ivy.wf().findCase(caseId).getBusinessCase();
 		TicketRequest request = Ivy.repo().find(businessCase, getType());
 		return request;
 	}
-
 }
