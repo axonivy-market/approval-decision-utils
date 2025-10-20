@@ -8,7 +8,7 @@
 
 	<properties>
 		<ivy.engine.version>10.0.18</ivy.engine.version>
-		<project.build.plugin.version>10.0.16</project.build.plugin.version>
+		<project.build.plugin.version>10.0.17</project.build.plugin.version>
 	</properties>
 
 	<repositories>
