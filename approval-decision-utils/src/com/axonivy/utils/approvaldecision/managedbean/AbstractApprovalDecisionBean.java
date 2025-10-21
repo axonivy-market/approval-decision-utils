@@ -1,7 +1,7 @@
 package com.axonivy.utils.approvaldecision.managedbean;
 
 import java.io.Serializable;
-import java.lang.reflect.InvocationTargetException;
+import java.time.Instant;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -13,18 +13,22 @@ import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.primefaces.model.SortMeta;
 
-import com.axonivy.utils.approvaldecision.entities.BaseApprovalHistory;
 import com.axonivy.utils.approvaldecision.enums.ApprovalDecisionOption;
+import com.axonivy.utils.approvaldecision.repository.bean.BaseApprovalHistory;
+import com.axonivy.utils.approvaldecision.repository.bean.BaseRequest;
+import com.axonivy.utils.approvaldecision.repository.service.BaseRequestRepository;
 import com.axonivy.utils.approvaldecision.utils.DateUtils;
 import com.axonivy.utils.approvaldecision.utils.SortFieldUtils;
 
+import ch.ivyteam.ivy.environment.Ivy;
 import ch.ivyteam.ivy.security.ISecurityContext;
 import ch.ivyteam.ivy.security.IUser;
 
-public abstract class AbstractApprovalDecisionBean<T extends BaseApprovalHistory<ID>, ID extends Serializable> implements Serializable {
+public abstract class AbstractApprovalDecisionBean<T extends BaseApprovalHistory, R extends BaseRequest<T>> implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
+	protected R baseRequest;
 	protected T approvalHistory;
 	private List<Enum<?>> decisions = new ArrayList<>();
 	private List<Enum<?>> confirmations = new ArrayList<>();
@@ -35,24 +39,17 @@ public abstract class AbstractApprovalDecisionBean<T extends BaseApprovalHistory
 	@SuppressWarnings("unused")
 	private AbstractApprovalDecisionBean() { }
 	
-	public AbstractApprovalDecisionBean(List<T> histories, List<Enum<?>> decisions, List<Enum<?>> confirmations) {
+	public AbstractApprovalDecisionBean(Long caseId, List<Enum<?>> decisions, List<Enum<?>> confirmations) {
 		setDecisions(decisions);
 		setConfirmations(confirmations);
-		initApprovalHistories(histories);
+		initApprovalHistories(caseId);
 		initSelectedConfirmations();
 	}
-
-	protected abstract Class<T> getApprovalHistoryType();
 	
-	private T initApprovalHistory() {
-		try {
-			return getApprovalHistoryType().getDeclaredConstructor().newInstance();
-		} catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException
-				| NoSuchMethodException | SecurityException e) {
-			throw new RuntimeException("Cannot instantiate ApprovalHistory", e);
-		}
-	}
-	
+	protected abstract R createRequest();
+    protected abstract T createApprovalHistory();
+    protected abstract Class<? extends BaseRequest<?>> getRequestType();
+    
 	/**
 	 * Get decision name from an enum. We use enum ApprovalDecisionOption by
 	 * default. If you use other enum, override this method
@@ -88,23 +85,38 @@ public abstract class AbstractApprovalDecisionBean<T extends BaseApprovalHistory
 				String.join(",", selectedConfirmations.stream().map(Enum::name).toList()).trim());
 	}
 
-	private void initApprovalHistories(List<T> histories) {
+	private void initApprovalHistories(Long caseId) {
+		baseRequest = findBaseRequest(caseId);
+		if (baseRequest == null) {
+			baseRequest = createRequest();
+			baseRequest.setCaseId(caseId);
+			baseRequest.setApprovalHistories(new ArrayList<>());
+		}
+			
+		List<T> histories = baseRequest.getApprovalHistories();
 		if (CollectionUtils.isEmpty(histories)) {
 			histories = new ArrayList<>();
 		}
 
-		setApprovalHistories(histories.stream().filter(p -> !p.getIsEditing())
-				.sorted(Comparator.comparing((BaseApprovalHistory<ID> p) -> p.getApprovalDate()).reversed())
-				.collect(Collectors.toList()));
-	    setApprovalHistory(histories.stream().filter(p -> p.getIsEditing()).findFirst().orElse(initApprovalHistory()));
+		approvalHistories = histories.stream().filter(p -> !p.getIsEditing())
+				.sorted(Comparator.comparing(BaseApprovalHistory::getApprovalDate).reversed())
+				.collect(Collectors.toList());
+	    approvalHistory = histories.stream().filter(p -> p.getIsEditing()).findFirst().orElse(createApprovalHistory());
 
-		getApprovalHistories().forEach(history -> {
-			history.setDisplayUserName(history.getHeader().getModifiedByUserName());
+		approvalHistories.forEach(history -> {
+			history.setDisplayUserName(history.getModifiedByUserName());
 			history.setDisplayApprovalDate(DateUtils.getFormattedDateTime(history.getApprovalDate()));
 			history.setSortableApprovalDate(DateUtils.getSortableFormattedDateTime(history.getApprovalDate()));
 		});
 
 		initDefaultSortField();
+	}
+
+	/** get histories by caseId
+	 */
+	private R findBaseRequest(Long caseId) {
+		var baseRequest = createRepository().findByCaseId(caseId);
+		return baseRequest;
 	}
 
 	public boolean isApprovalHistoryTableSortDescending() {
@@ -134,39 +146,56 @@ public abstract class AbstractApprovalDecisionBean<T extends BaseApprovalHistory
 		}
 	}
 
-	protected void handleBeforeSave(List<T> histories) {
-		if (CollectionUtils.isNotEmpty(confirmations)) {
-			handleConfirmation();
-		}
-
-		histories.clear();
-		histories.addAll(getApprovalHistories());
-		if (StringUtils.isNotBlank(approvalHistory.getDecision())
-				|| StringUtils.isNotBlank(approvalHistory.getComment())
-				|| StringUtils.isNotBlank(approvalHistory.getSelectedConfirmations())) {
-			approvalHistory.setApprovalDate(LocalDateTime.now());
-			histories.add(approvalHistory);
-		}
-	}
-
 	/**
 	 * Handle decision and confirmation stuffs before save.
 	 *
 	 */
-	public void handleApprovalHistoryBeforeSave(List<T> histories) {
+	public R handleForSave() {
 		approvalHistory.setIsEditing(true);
-		handleBeforeSave(histories);
+		
+		handleApprovalHistoryForSave();
+		
+		baseRequest = createRepository().save(baseRequest);
+		return baseRequest;
 	}
 
 	/**
 	 * Handle decision and confirmation stuffs before submit.
 	 *
 	 */
-	public void handleApprovalHistoryBeforeSubmit(List<T> histories) {
+	public R handleForSubmit() {
 		approvalHistory.setIsEditing(false);
-		handleBeforeSave(histories);
+		handleApprovalHistoryForSave();
+		
+		baseRequest = createRepository().save(baseRequest);
+		return baseRequest;
 	}
 
+	private void handleApprovalHistoryForSave() {
+		if (CollectionUtils.isNotEmpty(confirmations)) {
+			handleConfirmation();
+		}
+
+		baseRequest.setApprovalHistories(new ArrayList<>());
+		baseRequest.getApprovalHistories().addAll(getApprovalHistories());
+		
+		if (StringUtils.isNotBlank(approvalHistory.getDecision())
+				|| StringUtils.isNotBlank(approvalHistory.getComment())
+				|| StringUtils.isNotBlank(approvalHistory.getSelectedConfirmations())) {
+			approvalHistory.setApprovalDate(LocalDateTime.now());						// set ApprovalDate
+			approvalHistory.setModifiedDate(Instant.now());								// set ModifiedDate
+			approvalHistory.setModifiedByUserName(Ivy.session().getSessionUserName());	// set UserName
+
+			baseRequest.getApprovalHistories().add(approvalHistory);
+		}
+	}
+	
+	@SuppressWarnings({ "rawtypes", "unchecked"})
+	protected BaseRequestRepository<R> createRepository() {
+		Class<? extends BaseRequest> requestType = getRequestType();
+		return BaseRequestRepository.of((Class<R>) requestType);
+    }
+	
 	/**
 	 * Get display name of an Ivy user by username
 	 *
@@ -181,6 +210,10 @@ public abstract class AbstractApprovalDecisionBean<T extends BaseApprovalHistory
 				.orElse(username);
 	}
 
+	public R getRequest() {
+		return baseRequest;
+	}
+	
 	public T getApprovalHistory() {
 		return approvalHistory;
 	}
@@ -215,10 +248,6 @@ public abstract class AbstractApprovalDecisionBean<T extends BaseApprovalHistory
 
 	public List<T> getApprovalHistories() {
 		return approvalHistories;
-	}
-
-	public void setApprovalHistories(List<T> approvalHistories) {
-		this.approvalHistories = approvalHistories;
 	}
 
 	public SortMeta getDefaultSortField() {

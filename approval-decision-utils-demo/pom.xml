@@ -6,16 +6,10 @@
 	<version>12.0.4-SNAPSHOT</version>
 	<packaging>iar</packaging>
 	<properties>
-		<ivy.engine.version>12.0.0</ivy.engine.version>
-		<project.build.plugin.version>12.0.0</project.build.plugin.version>
+		<ivy.engine.version>12.0.8</ivy.engine.version>
+		<project.build.plugin.version>12.0.8</project.build.plugin.version>
 	</properties>
 	<dependencies>
-		<dependency>
-			<groupId>org.hibernate</groupId>
-			<artifactId>hibernate-jpamodelgen</artifactId>
-			<version>5.4.33.Final</version>
-			<scope>provided</scope>
-		</dependency>
 		<dependency>
 			<groupId>com.axonivy.utils.approvaldecision</groupId>
 			<artifactId>approval-decision-utils</artifactId>
@@ -48,25 +42,6 @@
 				<artifactId>project-build-plugin</artifactId>
 				<version>${project.build.plugin.version}</version>
 				<extensions>true</extensions>
-				<executions>
-					<execution>
-						<id>annotation-proc</id>
-						<phase>generate-sources</phase>
-						<goals>
-							<goal>compileProject</goal>
-						</goals>
-						<configuration>
-							<compilerOptions>
-								<compilerOption>
-									-ApersistenceXml=${basedir}/src/META-INF/persistence.xml</compilerOption>
-								<compilerOption>-s</compilerOption>
-								<compilerOption>${basedir}/src_generated</compilerOption>
-								<compilerOption>-proc:only</compilerOption>
-							</compilerOptions>
-							<skipScriptValidation>true</skipScriptValidation>
-						</configuration>
-					</execution>
-				</executions>
 				<configuration>
 					<ivyVersion>${ivy.engine.version}</ivyVersion>
 					<compilerOptions>

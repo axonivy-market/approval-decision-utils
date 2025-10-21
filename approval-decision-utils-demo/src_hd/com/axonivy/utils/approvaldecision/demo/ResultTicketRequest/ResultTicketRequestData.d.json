@@ -1,0 +1,11 @@
+{
+  "$schema" : "https://json-schema.axonivy.com/data-class/12.0.0/data-class.json",
+  "simpleName" : "ResultTicketRequestData",
+  "namespace" : "com.axonivy.utils.approvaldecision.demo.ResultTicketRequest",
+  "isBusinessCaseData" : false,
+  "fields" : [ {
+    "name" : "bean",
+    "type" : "com.axonivy.utils.approvaldecision.demo.managedbean.TicketProcessBean",
+    "modifiers" : [ "PERSISTENT" ]
+  } ]
+}
