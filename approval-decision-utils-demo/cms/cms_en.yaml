@@ -23,6 +23,10 @@ Dialogs:
             ApprovalDecisionHelpText: 'Step 2: Please select a decision option and write a comment'
             DecisionLegend: 'Step 2: Review Decision'
             Title: Review ticket request
+          SimpleRequest:
+            Title: Simple Request
+          SimpleResult:
+            Title: Simple Request Result
 Enums:
   com:
     axonivy:

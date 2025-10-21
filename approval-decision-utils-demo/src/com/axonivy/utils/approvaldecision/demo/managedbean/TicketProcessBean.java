@@ -6,7 +6,6 @@ import java.util.Map;
 
 import com.axonivy.utils.approvaldecision.demo.contentstate.TicketProcessContentState;
 import com.axonivy.utils.approvaldecision.demo.dao.TicketRequestDAO;
-import com.axonivy.utils.approvaldecision.demo.entities.ApprovalHistory;
 import com.axonivy.utils.approvaldecision.demo.entities.TicketRequest;
 import com.axonivy.utils.approvaldecision.demo.enums.Department;
 import com.axonivy.utils.approvaldecision.demo.enums.ProcessStep;
@@ -81,12 +80,10 @@ public class TicketProcessBean {
 	private void handleSaving() {
 		TicketRequest saved = TicketRequestDAO.getInstance().save(this.request);
 		setRequest(saved);
-		this.approvalDecisionBean.setApprovalHistory(this.request.getApprovalHistories().stream()
-				.filter(p -> p.getIsEditing()).findFirst().orElse(new ApprovalHistory()));
 	}
 
 	public void save() {
-		approvalDecisionBean.handleApprovalHistoryBeforeSave(this.request.getApprovalHistories());
+		approvalDecisionBean.handleForSave();
 		handleSaving();
 		TicketProcessUtils.showInfo();
 	}
@@ -95,8 +92,7 @@ public class TicketProcessBean {
 		if (processStep == ProcessStep.CONFIRM_TICKET) {
 			approvalDecisionBean.getApprovalHistory().setDecision(TicketProcessApprovalDecision.COMPLETE.name());
 		}
-
-		approvalDecisionBean.handleApprovalHistoryBeforeSubmit(this.request.getApprovalHistories());
+		approvalDecisionBean.handleForSubmit();
 		handleSaving();
 	}
 

@@ -1,12 +1,14 @@
 package com.axonivy.utils.approvaldecision.test;
 
 import static com.codeborne.selenide.Condition.exactText;
+import static com.codeborne.selenide.Condition.matchText;
 import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.open;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
+import java.time.Duration;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -35,7 +37,7 @@ public class ApprovalDecisionWebTest {
 		String password = URLEncoder.encode("123456", "UTF-8");
 		fixture.login(username, password);
 		
-		open(EngineUrl.createProcessUrl("/approval-decision-utils-demo/18BA886784A13BAE/start.ivp"));
+		open(EngineUrl.createProcessUrl("/approval-decision-utils-demo/18BA886784A13BAE/ticketRequest.ivp"));
 	}
 
 	@Test
@@ -103,7 +105,10 @@ public class ApprovalDecisionWebTest {
 		$(By.id("content-form:approval-decision:decision-comment")).setValue(REQUEST_COMMENT);
 
 		$(By.id("content-form:complete-button")).click();
-		Selenide.sleep(1000);
+		
+		//Wait for goto Step 2
+		$(By.id("content-form:approval-decision:headline-panel"))
+		    .shouldHave(matchText("^Step 2.*"), Duration.ofSeconds(30));
 
 		SelectOneRadio decisionReview = PrimeUi
 				.selectOneRadio(By.id("content-form:approval-decision:decision-options"));

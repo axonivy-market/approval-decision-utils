@@ -1,6 +1,0 @@
-RequestTicketFormData #class
-com.axonivy.utils.approvaldecision.RequestTicketForm #namespace
-bean com.axonivy.utils.approvaldecision.demo.managedbean.TicketProcessBean #field
-bean PERSISTENT #fieldModifier
-decisionResult String #field
-decisionResult PERSISTENT #fieldModifier

@@ -6,4 +6,5 @@ import com.axonivy.utils.approvaldecision.validation.ApprovalDecisionValidator;
 
 @FacesValidator(value = "ticketProcessValidator")
 public class TicketProcessValidator extends ApprovalDecisionValidator {
+	
 }
