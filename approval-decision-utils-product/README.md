@@ -7,7 +7,8 @@ Axon Ivy's Approval Decision Utils provides a standardized approach for implemen
 - Provides a clear view of the ongoing approval history to meet regulatory, compliance, and transparency requirements.
 
 ## Demo 
-The demo shows how to integrate Approval-Decision-Utils into your project. It includes a simple HSQLDB datasource that can run without additional configuration.
+The demo shows how to integrate Approval-Decision-Utils into your project.
+There are 3 demos: 1 for a simple setup, 2 for different customizations with same process step:
 
 ### 1. Display decision option
 
@@ -27,28 +28,14 @@ The demo shows how to integrate Approval-Decision-Utils into your project. It in
 
 ## Setup
 
-To integrate and use  Approval Decision Utils in your project, you must
-- create database tables:  your business data table, table `ApprovalHistory`, and a table for relationship between `ApprovalHistory` & your business data table.
-- provide entities & DAO classes
-- provide the project a bean for the UI Component `ApprovalDecision`
+In the demo, you will find examples for 3 setups: 1 simple setup, 1 extended setup from BaseRequest with it's Approval Histories (CompositeTicketRequest), a separated setup : Entity TicketRequest is standalone with BaseRequest.
 
-#### Create database tables
-
-Create 3 tables: business data table, table `ApprovalHistory`, and a join table linking `ApprovalHistory` with the business data table.
-
-In the Demo, business data table is `TicketRequest`, the full script [here](/script/scripts.sql).
-
-#### Provide entities & DAO classes
-
-Create 2 entites: 
-- business data entity which extends class `BaseRequest`.
-- entity `ApprovalHistory` which extends class `BaseApprovalHistory`.
-
-Approval Decision Utils already includes [Axon Ivy Persistence Utils](https://github.com/axonivy-market/persistence-utils) library to interact with the database.
+To integrate and use Approval Decision Utils in your project, you must provide a bean for the UI Component `ApprovalDecision`
 
 #### Provide bean for the UI Component `ApprovalDecision`
 
-Create a bean class extends `AbstractApprovalDecisionBean` with constructor parameters: histories, decisions, confirmations.
+Use the buit-in `DefaultApprovalDecisionBean` as in simple demo.
+Or create a bean class extends `AbstractApprovalDecisionBean` with constructor parameters: histories, decisions, confirmations.
 
 There are a pre-defined enum `ApprovalDecisionOption` (values: APPROVAL, REJECT) can be used as decisions of the bean.
 
@@ -99,35 +86,38 @@ In the Demo, the bean `TicketApprovalDecisionBean` uses decision options from th
 
 #### Attributes
 
-- `managedBean`: It is required and must extend `com.axonivy.utils.approvaldecision.managedbean.AbstractApprovalDecisionBean` class.
-- `isReadOnly`: Configures the component to be read-only. The default is `false`.
-- `fieldsetToggleable`: Makes the fieldset toggleable. Default is `false`.
-- `fieldsetLegend`: Legend text of the fieldset. Default is `Approval decision`.
-- `fieldsetStyleClass`: Style class of the fieldset.
-- `headline`: Headline text inside the component.
-- `headlinePanelStyleClass`: Style class for the panel of the headline.
-- `helpText`: Help text inside the component.
-- `helpTextPanelStyleClass`: Style class for the panel of the help text.
-- `helpTextStyleClass`: Style class for the help text.
-- `validatorId`: ID of the validator, default value is `approvalDecisionValidator` (`com.axonivy.utils.approvaldecision.validation.ApprovalDecisionValidator`).
-- `decisionLabel`: Label for the decision options.
-- `decisionRequired`: Flag to perform a mandatory check for decision. Default is `true`.
-- `decisionRendered`: Flag to render decision options. Default is `true`.
-- `decisionRequiredMessage`: Error message displayed when performing a mandatory check for the decision options. The default value is the CMS `/Labels/RequiredFieldMessage`.
-- `decisionPanelStyleClass`: Style class for the panel of decision options.
-- `listenerOnDecisionAction`: Listener event to be triggered when a decision is selected.
-- `componentToUpdateOnDecision`: Components to be updated when a decision is selected. The default value is `@this`.
-- `decisionCommentLabel`: Label for the comment. Default value is the CMS `/Labels/Comment`.
-- `commentRequired`: Flag to perform mandatory check for comment. Default is `true`.
-- `commentRendered`: Flag to render comment. Default is `true`.
-- `commentRequiredMessage`: Error message displayed when performing mandatory check for comment. Default value is the CMS `/Labels/RequiredFieldMessage`.
-- `commentPanelStyleClass`: Style class for the comment panel.
-- `confirmationRequired`: Flag to perform mandatory check for the confirmation options. Default is `false`.
-- `confirmationRequiredMessage`: Error message displayed when performing mandatory check for the confirmation options. Default value is the CMS `/Labels/RequiredFieldMessage`.
-- `confirmationPanelStyleClass`: Style class for the panel of the confirmation options.
-- `confirmationLabel`: Label for the confirmation options.
-- `approvalHistoryRendered`: Flag to render the approval history table. Default is `true`.
-- `approvalHistoryPanelStyleClass`: Style class for the panel of the approval history table.
+AttributeDescriptionDefault ValuemanagedBeanRequired. Must extend AbstractApprovalDecisionBean.
+
+| Name                            | Description                                                                                       | Default                                 |
+| :---------------------------- | :-------------------------------------------------------------------------------------------------- | :-------------------------------------- |
+| `managedBean`                   | A bean extends class 'com.axonivy.utils.approvaldecision.managedbean.AbstractApprovalDecisionBean' |                                        |
+| `isReadOnly`                    | Configures the component to be read-only.                                                         | `false`                                 |
+| `fieldsetToggleable`            | Makes the fieldset toggleable.                                                                    | `false`                                 |
+| `fieldsetLegend`                | Legend text of the fieldset.                                                                      | `Approval decision`                     |
+| `fieldsetStyleClass`            | Style class of the fieldset.                                                                      |                                         |
+| `headline`                      | Headline text inside the component.                                                               |                                         |
+| `headlinePanelStyleClass`       | Style class for the panel of the headline.                                                        |                                         |
+| `helpText`                      | Help text inside the component.                                                                   |                                         |
+| `helpTextPanelStyleClass`       | Style class for the panel of the help text.                                                       |                                         |
+| `helpTextStyleClass`            | Style class for the help text.                                                                    |                                         |
+| `validatorId`                   | ID of the validator.                                                                              | `approvalDecisionValidator`             |
+| `decisionLabel`                 | Label for the decision options.                                                                   |                                         |
+| `decisionRequired`              | Mandatory check for decision.                                                                     | `true`                                  |
+| `decisionRendered`              | Flag to render decision options.                                                                  | `true`                                  |
+| `decisionRequiredMessage`       | Error message for mandatory decision check.                                                       | `CMS /Labels/RequiredFieldMessage`      |
+| `decisionPanelStyleClass`       | Style class for the decision panel.                                                               |                                         |
+| `listenerOnDecisionAction`      | Listener triggered when a decision is selected.                                                   |                                         |
+| `componentToUpdateOnDecision`   | Components to update when a decision is selected.                                                 | `@this`                                 |
+| `decisionCommentLabel`          | Label for the comment.                                                                            | `CMS /Labels/Comment`                   |
+| `commentRequired`               | Mandatory check for comment.                                                                      | `true`                                  |
+| `commentRendered`               | Flag to render comment.                                                                           | `true`                                  |
+| `commentRequiredMessage`        | Error message for mandatory comment check.                                                        | `CMS /Labels/RequiredFieldMessage`      |
+| `commentPanelStyleClass`        | Style class for the comment panel.                                                                |                                         |
+| `confirmationRequired`          | Mandatory check for confirmation options.                                                         | `false`                                 |
+| `confirmationRequiredMessage`   | Error message for mandatory confirmation check.                                                   | `CMS /Labels/RequiredFieldMessage`      |
+| `confirmationPanelStyleClass`   | Style class for the confirmation panel.                                                           |                                         |
+| `confirmationLabel`             | Label for the confirmation options.                                                               |                                         |
+| `approvalHistoryRendered`       | Flag to render the approval history table.                                                        | `true`                                  |
 
 #### Facets
 

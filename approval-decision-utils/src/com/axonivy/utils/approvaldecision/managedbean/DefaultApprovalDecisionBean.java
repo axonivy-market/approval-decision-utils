@@ -1,27 +1,35 @@
-package com.axonivy.utils.approvaldecision.demo.managedbean;
+package com.axonivy.utils.approvaldecision.managedbean;
 
 import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
 
-import com.axonivy.utils.approvaldecision.demo.entities.TicketRequest;
-import com.axonivy.utils.approvaldecision.demo.enums.TicketProcessApprovalConfirmation;
-import com.axonivy.utils.approvaldecision.demo.enums.TicketProcessApprovalDecision;
-import com.axonivy.utils.approvaldecision.managedbean.AbstractApprovalDecisionBean;
+import com.axonivy.utils.approvaldecision.enums.ApprovalDecisionOption;
 import com.axonivy.utils.approvaldecision.repository.bean.BaseApprovalHistory;
 import com.axonivy.utils.approvaldecision.repository.bean.BaseRequest;
 
-public class TicketApprovalDecisionBean
+import ch.ivyteam.ivy.environment.Ivy;
+
+/**
+ * <p>
+ * DefaultApprovalDecisionBean a built-in managed bean for ApprovalDecision UI
+ * component.
+ * </p>
+ * <p>
+ * This bean extends {@link AbstractApprovalDecisionBean}, attach to current Ivy
+ * case, Approval options: Approve & Reject, empty confirmation.
+ * </p>
+ */
+public class DefaultApprovalDecisionBean
 		extends AbstractApprovalDecisionBean<BaseApprovalHistory, BaseRequest<BaseApprovalHistory>> {
 
 	private static final long serialVersionUID = 1L;
 
-	private static final String VALIDATOR_ID = "ticketProcessValidator";
+	private static final String VALIDATOR_ID = "approvalDecisionValidator";
 	private String validatorId;
 
-	public TicketApprovalDecisionBean(TicketRequest request, List<Enum<?>> decisions, List<Enum<?>> confirmations) {
-		super(request.getCaseId(), decisions, confirmations);
-
+	public DefaultApprovalDecisionBean() {
+		super(Ivy.wfCase().getId(), List.of(ApprovalDecisionOption.APPROVE, ApprovalDecisionOption.REJECT), List.of());
 		this.validatorId = VALIDATOR_ID;
 	}
 
@@ -46,7 +54,7 @@ public class TicketApprovalDecisionBean
 		if (StringUtils.isBlank(decisionName)) {
 			return "";
 		}
-		return TicketProcessApprovalDecision.valueOf(decisionName).getCmsName();
+		return ApprovalDecisionOption.valueOf(decisionName).getCmsName();
 	}
 
 	@Override
@@ -54,14 +62,14 @@ public class TicketApprovalDecisionBean
 		if (StringUtils.isBlank(confirmationName)) {
 			return "";
 		}
-		return TicketProcessApprovalConfirmation.valueOf(confirmationName).getCmsName();
+		return confirmationName;
 	}
 
 	public String getValidatorId() {
 		return validatorId;
 	}
 
-	public void setValidatorId(String validatorId) {
-		this.validatorId = validatorId;
+	public void onChangeDecision() {
+		// empty method
 	}
 }

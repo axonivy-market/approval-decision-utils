@@ -5,8 +5,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import com.axonivy.utils.approvaldecision.demo.contentstate.TicketProcessContentState;
-import com.axonivy.utils.approvaldecision.demo.dao.TicketRequestDAO;
-import com.axonivy.utils.approvaldecision.demo.entities.TicketRequest;
+import com.axonivy.utils.approvaldecision.demo.entities.ExtendedTicketRequest;
 import com.axonivy.utils.approvaldecision.demo.enums.Department;
 import com.axonivy.utils.approvaldecision.demo.enums.ProcessStep;
 import com.axonivy.utils.approvaldecision.demo.enums.TicketProcessApprovalConfirmation;
@@ -15,50 +14,49 @@ import com.axonivy.utils.approvaldecision.demo.utils.TicketProcessUtils;
 
 import ch.ivyteam.ivy.environment.Ivy;
 
-public class TicketProcessBean {
+/**
+ * Bean for {@link ExtendedTicketRequest}
+ */
+public class ExtendedTicketProcessBean {
 
-	private TicketRequest request;
-	private TicketApprovalDecisionBean approvalDecisionBean;
+	private ExtendedTicketRequest request;
+	private ExtendTicketRequestBean approvalDecisionBean;
 	private TicketProcessContentState contentState;
 	private Map<String, String> departmentMails;
 
 	private ProcessStep processStep;
 
-	public TicketProcessBean(ProcessStep processStep) {
+	public ExtendedTicketProcessBean(ProcessStep processStep) {
 		this.processStep = processStep;
 		init();
 	}
 
 	private void init() {
-		Long caseId = Ivy.wfCase().getId();
-		request = TicketRequestDAO.getInstance().findByCaseId(caseId);
-
-		if (request == null) {
-			request = new TicketRequest();
-			request.setCaseId(caseId);
-			initTestRequestData();
-		}
-
 		contentState = new TicketProcessContentState();
+		Long caseId = Ivy.wfCase().getId();
 
 		if (processStep == ProcessStep.REQUEST_TICKET) {
-			approvalDecisionBean = new TicketApprovalDecisionBean(request,
+			approvalDecisionBean = new ExtendTicketRequestBean(caseId,
 					TicketProcessApprovalDecision.getRequestApprovalDecision(), null);
 			contentState.initRequestTicketContentState();
 			initForwardEmail();
 			onChangeDecision();
 		} else if (processStep == ProcessStep.REVIEW_TICKET) {
-			approvalDecisionBean = new TicketApprovalDecisionBean(request,
+			approvalDecisionBean = new ExtendTicketRequestBean(caseId,
 					TicketProcessApprovalDecision.getReviewApprovalDecision(), null);
 			contentState.initReviewTicketContentState();
 		} else if (processStep == ProcessStep.CONFIRM_TICKET) {
-			approvalDecisionBean = new TicketApprovalDecisionBean(request,
+			approvalDecisionBean = new ExtendTicketRequestBean(caseId,
 					TicketProcessApprovalDecision.getConfirmApprovalDecision(),
 					TicketProcessApprovalConfirmation.getConfirmApprovalConfirmation());
 			contentState.initConfirmTicketContentState();
 		} else {
-			approvalDecisionBean = new TicketApprovalDecisionBean(request, null, null);
+			approvalDecisionBean = new ExtendTicketRequestBean(caseId, null, null);
 			contentState.initResultTicketContentState();
+		}
+		request = approvalDecisionBean.getRequest();
+		if (request.getId() == null) {
+			initTestRequestData();
 		}
 	}
 
@@ -77,14 +75,9 @@ public class TicketProcessBean {
 		}
 	}
 
-	private void handleSaving() {
-		TicketRequest saved = TicketRequestDAO.getInstance().save(this.request);
-		setRequest(saved);
-	}
-
 	public void save() {
-		approvalDecisionBean.handleForSave();
-		handleSaving();
+		ExtendedTicketRequest saved = approvalDecisionBean.handleForSave();
+		setRequest(saved);
 		TicketProcessUtils.showInfo();
 	}
 
@@ -92,8 +85,8 @@ public class TicketProcessBean {
 		if (processStep == ProcessStep.CONFIRM_TICKET) {
 			approvalDecisionBean.getApprovalHistory().setDecision(TicketProcessApprovalDecision.COMPLETE.name());
 		}
-		approvalDecisionBean.handleForSubmit();
-		handleSaving();
+		ExtendedTicketRequest saved = approvalDecisionBean.handleForSubmit();
+		setRequest(saved);
 	}
 
 	public void cancel() throws MalformedURLException {
@@ -109,19 +102,19 @@ public class TicketProcessBean {
 		}
 	}
 
-	public TicketRequest getRequest() {
+	public ExtendedTicketRequest getRequest() {
 		return request;
 	}
 
-	public void setRequest(TicketRequest request) {
+	public void setRequest(ExtendedTicketRequest request) {
 		this.request = request;
 	}
 
-	public TicketApprovalDecisionBean getApprovalDecisionBean() {
+	public ExtendTicketRequestBean getApprovalDecisionBean() {
 		return approvalDecisionBean;
 	}
 
-	public void setApprovalDecisionBean(TicketApprovalDecisionBean approvalDecisionBean) {
+	public void setApprovalDecisionBean(ExtendTicketRequestBean approvalDecisionBean) {
 		this.approvalDecisionBean = approvalDecisionBean;
 	}
 

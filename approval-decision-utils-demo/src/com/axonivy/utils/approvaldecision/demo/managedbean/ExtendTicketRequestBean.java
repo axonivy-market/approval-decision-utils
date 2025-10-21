@@ -4,41 +4,42 @@ import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
 
-import com.axonivy.utils.approvaldecision.demo.entities.TicketRequest;
+import com.axonivy.utils.approvaldecision.demo.entities.ExtendedTicketRequest;
+import com.axonivy.utils.approvaldecision.demo.entities.CustomApprovalHistory;
 import com.axonivy.utils.approvaldecision.demo.enums.TicketProcessApprovalConfirmation;
 import com.axonivy.utils.approvaldecision.demo.enums.TicketProcessApprovalDecision;
 import com.axonivy.utils.approvaldecision.managedbean.AbstractApprovalDecisionBean;
-import com.axonivy.utils.approvaldecision.repository.bean.BaseApprovalHistory;
-import com.axonivy.utils.approvaldecision.repository.bean.BaseRequest;
 
-public class TicketApprovalDecisionBean
-		extends AbstractApprovalDecisionBean<BaseApprovalHistory, BaseRequest<BaseApprovalHistory>> {
+import ch.ivyteam.ivy.environment.Ivy;
+
+public class ExtendTicketRequestBean
+		extends AbstractApprovalDecisionBean<CustomApprovalHistory, ExtendedTicketRequest> {
 
 	private static final long serialVersionUID = 1L;
 
 	private static final String VALIDATOR_ID = "ticketProcessValidator";
 	private String validatorId;
 
-	public TicketApprovalDecisionBean(TicketRequest request, List<Enum<?>> decisions, List<Enum<?>> confirmations) {
-		super(request.getCaseId(), decisions, confirmations);
+	public ExtendTicketRequestBean(Long caseId, List<Enum<?>> decisions, List<Enum<?>> confirmations) {
+		super(caseId, decisions, confirmations);
 
 		this.validatorId = VALIDATOR_ID;
 	}
 
 	@Override
-	protected BaseRequest<BaseApprovalHistory> createRequest() {
-		return new BaseRequest<>();
+	protected ExtendedTicketRequest createRequest() {
+		return new ExtendedTicketRequest();
 	}
 
 	@Override
-	protected BaseApprovalHistory createApprovalHistory() {
-		return new BaseApprovalHistory();
+	protected CustomApprovalHistory createApprovalHistory() {
+		return new CustomApprovalHistory();
 	}
 
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Override
-	protected Class<BaseRequest<?>> getRequestType() {
-		return (Class) BaseRequest.class;
+	protected Class<ExtendedTicketRequest> getRequestType() {
+		return (Class) ExtendedTicketRequest.class;
 	}
 
 	@Override
@@ -55,6 +56,25 @@ public class TicketApprovalDecisionBean
 			return "";
 		}
 		return TicketProcessApprovalConfirmation.valueOf(confirmationName).getCmsName();
+	}
+
+	@Override
+	public ExtendedTicketRequest handleForSave() {
+		setCustomApprovalHistory();
+		return super.handleForSave();
+	}
+
+	@Override
+	public ExtendedTicketRequest handleForSubmit() {
+		setCustomApprovalHistory();
+		return super.handleForSubmit();
+	}
+
+	/*
+	 * set custom field for ApprovalHistory before saving
+	 */
+	private void setCustomApprovalHistory() {
+		this.getApprovalHistory().setApproverEmail(Ivy.session().getSessionUser().getEMailAddress());
 	}
 
 	public String getValidatorId() {
