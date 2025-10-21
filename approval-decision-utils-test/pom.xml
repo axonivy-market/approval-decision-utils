@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.axonivy.utils.approvaldecision</groupId>
 	<artifactId>approval-decision-utils-test</artifactId>
-	<version>10.0.23-SNAPSHOT</version>
+	<version>10.0.23</version>
 	<packaging>iar-integration-test</packaging>
 	<properties>
 		<ivy.engine.version>10.0.18</ivy.engine.version>
