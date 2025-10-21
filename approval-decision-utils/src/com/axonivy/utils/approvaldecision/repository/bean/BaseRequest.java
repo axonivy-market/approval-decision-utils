@@ -3,12 +3,12 @@ package com.axonivy.utils.approvaldecision.repository.bean;
 import java.util.ArrayList;
 import java.util.List;
 
-public class BaseRequest<T extends BaseApprovalHistory>{
+public class BaseRequest<T extends BaseApprovalHistory> {
 
 	private String id;
-	
+
 	private Long caseId;
-	
+
 	private List<T> approvalHistories = new ArrayList<>();
 
 	public String getId() {
@@ -18,7 +18,7 @@ public class BaseRequest<T extends BaseApprovalHistory>{
 	public void setId(String id) {
 		this.id = id;
 	}
-	
+
 	public Long getCaseId() {
 		return caseId;
 	}
@@ -34,5 +34,4 @@ public class BaseRequest<T extends BaseApprovalHistory>{
 	public void setApprovalHistories(List<T> approvalHistories) {
 		this.approvalHistories = approvalHistories;
 	}
-
 }

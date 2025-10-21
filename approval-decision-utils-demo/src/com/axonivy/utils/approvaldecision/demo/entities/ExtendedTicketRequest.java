@@ -83,5 +83,5 @@ public class ExtendedTicketRequest extends BaseRequest<CustomApprovalHistory> {
 	public String getSessionUsername() {
 		return Ivy.session().getSessionUserName();
 	}
-	
+
 }

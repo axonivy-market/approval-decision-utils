@@ -34,7 +34,7 @@ public class ExtendedTicketProcessBean {
 	private void init() {
 		contentState = new TicketProcessContentState();
 		Long caseId = Ivy.wfCase().getId();
-		
+
 		if (processStep == ProcessStep.REQUEST_TICKET) {
 			approvalDecisionBean = new ExtendTicketRequestBean(caseId,
 					TicketProcessApprovalDecision.getRequestApprovalDecision(), null);
@@ -55,7 +55,7 @@ public class ExtendedTicketProcessBean {
 			contentState.initResultTicketContentState();
 		}
 		request = approvalDecisionBean.getRequest();
-		if(request.getId() == null) {
+		if (request.getId() == null) {
 			initTestRequestData();
 		}
 	}
