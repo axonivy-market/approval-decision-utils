@@ -13,7 +13,6 @@ public abstract class BaseRepository<T> {
 	private static int DEFAULT_SEARCH_LIMIT = 5000;
 
 	abstract protected Class<T> getType();
-	
 
 	public T findById(String id) {
 		T obj = (T) Ivy.repo().find(id, getType());

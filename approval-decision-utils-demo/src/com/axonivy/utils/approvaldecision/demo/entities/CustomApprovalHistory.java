@@ -12,6 +12,4 @@ public class CustomApprovalHistory extends BaseApprovalHistory {
 	public void setApproverEmail(String approverEmail) {
 		this.approverEmail = approverEmail;
 	}
-
-
 }

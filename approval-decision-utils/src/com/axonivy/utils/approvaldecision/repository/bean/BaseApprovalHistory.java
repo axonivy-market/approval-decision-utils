@@ -17,15 +17,15 @@ public class BaseApprovalHistory {
 	private String selectedConfirmations;
 
 	private String modifiedByUserName;
-	
+
 	private Instant modifiedDate;
-	
+
 	// transient
 	private String displayUserName;
 
 	// transient
 	private String displayApprovalDate;
-	
+
 	// transient
 	private String sortableApprovalDate;
 
