@@ -11,20 +11,25 @@ import com.axonivy.utils.approvaldecision.repository.bean.BaseRequest;
 import ch.ivyteam.ivy.environment.Ivy;
 
 /**
- * <p>DefaultApprovalDecisionBean a built-in managed bean for ApprovalDecision UI component.</p>
- * <p>This bean extends {@link AbstractApprovalDecisionBean}, attach to current Ivy case, Approval options: Approve & Reject, empty confirmation.</p>
+ * <p>
+ * DefaultApprovalDecisionBean a built-in managed bean for ApprovalDecision UI
+ * component.
+ * </p>
+ * <p>
+ * This bean extends {@link AbstractApprovalDecisionBean}, attach to current Ivy
+ * case, Approval options: Approve & Reject, empty confirmation.
+ * </p>
  */
-public class DefaultApprovalDecisionBean extends AbstractApprovalDecisionBean<BaseApprovalHistory, BaseRequest<BaseApprovalHistory>> {
+public class DefaultApprovalDecisionBean
+		extends AbstractApprovalDecisionBean<BaseApprovalHistory, BaseRequest<BaseApprovalHistory>> {
 
 	private static final long serialVersionUID = 1L;
 
 	private static final String VALIDATOR_ID = "approvalDecisionValidator";
-    private String validatorId;
-    
+	private String validatorId;
+
 	public DefaultApprovalDecisionBean() {
-		super(Ivy.wfCase().getId(), 
-				List.of(ApprovalDecisionOption.APPROVE, ApprovalDecisionOption.REJECT), 
-				List.of());
+		super(Ivy.wfCase().getId(), List.of(ApprovalDecisionOption.APPROVE, ApprovalDecisionOption.REJECT), List.of());
 		this.validatorId = VALIDATOR_ID;
 	}
 
@@ -43,7 +48,7 @@ public class DefaultApprovalDecisionBean extends AbstractApprovalDecisionBean<Ba
 	protected Class<BaseRequest<?>> getRequestType() {
 		return (Class) BaseRequest.class;
 	}
-	
+
 	@Override
 	public String getDecisionLabel(String decisionName) {
 		if (StringUtils.isBlank(decisionName)) {
@@ -63,8 +68,8 @@ public class DefaultApprovalDecisionBean extends AbstractApprovalDecisionBean<Ba
 	public String getValidatorId() {
 		return validatorId;
 	}
-	
+
 	public void onChangeDecision() {
-		
+
 	}
 }

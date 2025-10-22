@@ -11,7 +11,8 @@ import com.axonivy.utils.approvaldecision.managedbean.AbstractApprovalDecisionBe
 import com.axonivy.utils.approvaldecision.repository.bean.BaseApprovalHistory;
 import com.axonivy.utils.approvaldecision.repository.bean.BaseRequest;
 
-public class TicketApprovalDecisionBean extends AbstractApprovalDecisionBean<BaseApprovalHistory, BaseRequest<BaseApprovalHistory>> {
+public class TicketApprovalDecisionBean
+		extends AbstractApprovalDecisionBean<BaseApprovalHistory, BaseRequest<BaseApprovalHistory>> {
 
 	private static final long serialVersionUID = 1L;
 
@@ -20,7 +21,7 @@ public class TicketApprovalDecisionBean extends AbstractApprovalDecisionBean<Bas
 
 	public TicketApprovalDecisionBean(TicketRequest request, List<Enum<?>> decisions, List<Enum<?>> confirmations) {
 		super(request.getCaseId(), decisions, confirmations);
-		
+
 		this.validatorId = VALIDATOR_ID;
 	}
 
@@ -39,7 +40,7 @@ public class TicketApprovalDecisionBean extends AbstractApprovalDecisionBean<Bas
 	protected Class<BaseRequest<?>> getRequestType() {
 		return (Class) BaseRequest.class;
 	}
-	
+
 	@Override
 	public String getDecisionLabel(String decisionName) {
 		if (StringUtils.isBlank(decisionName)) {

@@ -12,7 +12,8 @@ import com.axonivy.utils.approvaldecision.managedbean.AbstractApprovalDecisionBe
 
 import ch.ivyteam.ivy.environment.Ivy;
 
-public class ExtendTicketRequestBean extends AbstractApprovalDecisionBean<CustomApprovalHistory, ExtendedTicketRequest> {
+public class ExtendTicketRequestBean
+		extends AbstractApprovalDecisionBean<CustomApprovalHistory, ExtendedTicketRequest> {
 
 	private static final long serialVersionUID = 1L;
 
@@ -21,7 +22,7 @@ public class ExtendTicketRequestBean extends AbstractApprovalDecisionBean<Custom
 
 	public ExtendTicketRequestBean(Long caseId, List<Enum<?>> decisions, List<Enum<?>> confirmations) {
 		super(caseId, decisions, confirmations);
-		
+
 		this.validatorId = VALIDATOR_ID;
 	}
 
@@ -40,7 +41,7 @@ public class ExtendTicketRequestBean extends AbstractApprovalDecisionBean<Custom
 	protected Class<ExtendedTicketRequest> getRequestType() {
 		return (Class) ExtendedTicketRequest.class;
 	}
-	
+
 	@Override
 	public String getDecisionLabel(String decisionName) {
 		if (StringUtils.isBlank(decisionName)) {
@@ -62,7 +63,7 @@ public class ExtendTicketRequestBean extends AbstractApprovalDecisionBean<Custom
 		setCustomApprovalHistory();
 		return super.handleForSave();
 	}
-	
+
 	@Override
 	public ExtendedTicketRequest handleForSubmit() {
 		setCustomApprovalHistory();
@@ -75,7 +76,7 @@ public class ExtendTicketRequestBean extends AbstractApprovalDecisionBean<Custom
 	private void setCustomApprovalHistory() {
 		this.getApprovalHistory().setApproverEmail(Ivy.session().getSessionUser().getEMailAddress());
 	}
-	
+
 	public String getValidatorId() {
 		return validatorId;
 	}
