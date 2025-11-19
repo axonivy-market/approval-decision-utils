@@ -1,55 +1,55 @@
-# Genehmigung Entscheid Utils
+# Genehmigen-Entscheidung Utils
 
-#Axon EfeusGenehmigung Entscheid Utils versieht ein normgerechtes Konzept für
-implementieren eure Genehmigungen in irgendwelchem dienstlichen Arbeitsgang.
-Diese Komponente:
+Axon Ivy's Approval Decision Utils bietet einen standardisierten Ansatz für die
+Implementierung Ihrer Genehmigungen in jedem Geschäftsprozess. Diese Komponente:
 
-- Gibt du ein tarifliches Muster zu machen Entscheide und Bestätigungen.
-- Implementiert eine Kommentar Aufgabe für besser Dokumentation.
-- Versieht einen klaren Ausblick von der laufenden Genehmigung Geschichte zu
-  treffen #bestimmend, Zustimmung, und Transparenz Forderungen.
+- Bietet Ihnen ein Standardmuster für Entscheidungen und Bestätigungen.
+- Implementiert eine Kommentarfunktion für eine bessere Dokumentation.
+- Bietet einen klaren Überblick über den laufenden Genehmigungsprozess, um
+  regulatorische, Compliance- und Transparenzanforderungen zu erfüllen.
 
 ## Demo
-Die Demo Vorstellungen zu integrieren wie Genehmigung-Entscheid-Utils hinein
-eure Projekt. Dort sind 3 Demos: 1 für eine simple Einrichtung, 2 für
-verschieden #Gewöhnung mit gleich Arbeitsgang Stufe:
+Die Demo zeigt, wie Sie Approval-Decision-Utilities in Ihr Projekt integrieren
+können. Es gibt 3 Demos: 1 für eine einfache Einrichtung, 2 für verschiedene
+Anpassungen mit demselben Prozessschritt:
 
-### 1. Display Entscheid Option
+### 1. Entscheidungsoption anzeigen
 
 ![](./images/1-request.png)
 
-### 2. Validier Entscheid Option
+### 2. Entscheidungsoption validieren
 
 ![](./images/3-request-validate.png)
 
-### 3. Fährte Genehmigung Geschichte
+### 3. Genehmigungshistorie verfolgen
 
 ![](./images/4-request-history.png)
 
-### 4. #Ausgewählt Bestätigung checkbox
+### 4. Bestätigungsfeld auswählen
 
 ![](./images/5-request-confirmation.png)
 
 ## Einrichtung
 
-In der Demo, du willst Beispiele für 3 Einrichtungen finden: 1 simple
-Einrichtung, 1 #länger Einrichtung von BaseRequest mit es ist Genehmigung
-Geschichten (CompositeTicketRequest), eine getrennte Einrichtung : Entität
-TicketRequest ist eigenständig mit BaseRequest.
+In der Demo finden Sie Beispiele für drei Konfigurationen: eine einfache
+Konfiguration, eine erweiterte Konfiguration von BaseRequest mit
+Genehmigungs-Historie (CompositeTicketRequest) und eine separate Konfiguration:
+Entity TicketRequest ist eigenständig mit BaseRequest.
 
-Zu integrieren und benutzen Genehmigung Entscheid Utils in eurem Projekt, du
-musst eine Bohne versehen für die UI Komponente `ApprovalDecision`
+Um Approval Decision Utilities in Ihr Projekt zu integrieren und zu verwenden,
+müssen Sie eine Bean für die UI-Komponente `ApprovalDecision bereitstellen.`
 
-#### Versieh Bohne für die UI Komponente `ApprovalDecision`
+#### Stellen Sie Bean für die UI-Komponente „ `ApprovalDecision” bereit.`
 
-Benutz das buit-herein `DefaultApprovalDecisionBean` da in simpel Demo. Oder
-schaffen eine Bohne Klasse erweitert `AbstractApprovalDecisionBean` mit Erbauer
-Parameter: Geschichten, Entscheide, Bestätigungen.
+Verwenden Sie die integrierte „ `“ „DefaultApprovalDecisionBean“ „` “ wie in der
+einfachen Demo. Oder erstellen Sie eine Bean-Klasse, die „ `“
+„AbstractApprovalDecisionBean“ „` “ mit den Konstruktorparametern „histories“,
+„decisions“ und „confirmations“ erweitert.
 
-Dort sind ein pre-#abgesteckt enum `ApprovalDecisionOption` (schätzt:
-GENEHMIGUNG, ABSONDERUNG) kann sein benutzt da Entscheide von der Bohne.
+Es gibt eine vordefinierte Aufzählungs `ApprovalDecisionOption` (Werte:
+APPROVAL, REJECT) kann als Entscheidung der Bean verwendet werden.
 
-Beispielsweise:
+Beispiel:
 
     public class SimpleApprovalBean extends AbstractApprovalDecisionBean<ApprovalHistory, Long> {
 
@@ -65,14 +65,14 @@ Beispielsweise:
     	}
     }
 
-#Im Fall von benutzen eure eigenes enum, bitte Überbrückung die Bohne Methode
-`getDecisionLabel(#Aufreihen decisionName)`, #wo die decisionName ist Wert
-Schnur von eure #benutzerdefiniert enum.
+Wenn Sie Ihre eigene Enumeration verwenden, überschreiben Sie bitte die
+Bean-Methode „ `getDecisionLabel(String decisionName)` ”, wobei „decisionName”
+der Wertestring Ihrer benutzerdefinierten Enumeration ist.
 
-In der Demo, die Bohne `TicketApprovalDecisionBean` Nutzungen Entscheid Optionen
-von die enum `TicketProcessApprovalDecision`.
+In der Demo verwendet die Bean `TicketApprovalDecisionBean`
+Entscheidungsoptionen aus der Enumeration `TicketProcessApprovalDecision`.
 
-### Das UI Komponente
+### Die UI-Komponente
      <ic:com.axonivy.utils.approvaldecision.ApprovalDecision
     	id="approvalDecision"
     	managedBean="#{managedBean.approvalDecisionBean}"
@@ -99,46 +99,46 @@ von die enum `TicketProcessApprovalDecision`.
 
 #### Attribute
 
-AttributeDescriptionDefault ValuemanagedBeanRequired. Müssen erweitern
-AbstractApprovalDecisionBean.
+AttributBeschreibungStandardwertmanagedBeanErforderlich. Muss
+AbstractApprovalDecisionBean erweitern.
 
-| Name                          | Steckbrief                                                                                                | Vorgabe                               |
-| ----------------------------- | --------------------------------------------------------------------------------------------------------- | ------------------------------------- |
-| `managedBean`                 | Eine Bohne erweitert Klasse scom.axonivy.utils.approvaldecision.managedbean.AbstractApprovalDecisionBeans |                                       |
-| `isReadOnly`                  | Konfiguriert die Komponente zu sein gelesen-einzige.                                                      | `Falsch`                              |
-| `fieldsetToggleable`          | Herstellungen die fieldset toggleable.                                                                    | `Falsch`                              |
-| `fieldsetLegend`              | Legende Text von der fieldset.                                                                            | `Genehmigung Entscheid`               |
-| `fieldsetStyleClass`          | Stil Klasse von die fieldset.                                                                             |                                       |
-| `Schlagzeile`                 | Schlagzeile Text innerhalb die Komponente.                                                                |                                       |
-| `headlinePanelStyleClass`     | Stil Klasse für die Diskussionsrunde von der Schlagzeile.                                                 |                                       |
-| `helpText`                    | Hilfe Text innerhalb die Komponente.                                                                      |                                       |
-| `helpTextPanelStyleClass`     | Stil Klasse für die Diskussionsrunde von den Hilfe Text.                                                  |                                       |
-| `helpTextStyleClass`          | Stil Klasse für den Hilfe Text.                                                                           |                                       |
-| `validatorId`                 | ID Von dem Prüfer.                                                                                        | `approvalDecisionValidator`           |
-| `decisionLabel`               | Etikett für die Entscheid Optionen.                                                                       |                                       |
-| `decisionRequired`            | Obligatorische Kontrolle für Entscheid.                                                                   | `Wahr`                                |
-| `decisionRendered`            | Fahne zu #ausschmelzen Entscheid Optionen.                                                                | `Wahr`                                |
-| `decisionRequiredMessage`     | Fehler Meldung für obligatorisch Entscheid Kontrolle.                                                     | `CMS /Etiketten/RequiredFieldMessage` |
-| `decisionPanelStyleClass`     | Stil Klasse für die Entscheid Diskussionsrunde.                                                           |                                       |
-| `listenerOnDecisionAction`    | Zuhörer löste aus #wann ist #auswählen einen Entscheid.                                                   |                                       |
-| `componentToUpdateOnDecision` | Komponenten zu verbessern als ist #auswählen einen Entscheid.                                             | `@Dies`                               |
-| `decisionCommentLabel`        | Etikett für den Kommentar.                                                                                | `CMS /Etiketten/Kommentar`            |
-| `commentRequired`             | Obligatorische Kontrolle für kommentier.                                                                  | `Wahr`                                |
-| `commentRendered`             | Fahne zu #ausschmelzen Kommentar.                                                                         | `Wahr`                                |
-| `commentRequiredMessage`      | Fehler Meldung für obligatorisch Kommentar Kontrolle.                                                     | `CMS /Etiketten/RequiredFieldMessage` |
-| `commentPanelStyleClass`      | Stil Klasse für die Kommentar Diskussionsrunde.                                                           |                                       |
-| `confirmationRequired`        | Obligatorische Kontrolle für Bestätigung Optionen.                                                        | `Falsch`                              |
-| `confirmationRequiredMessage` | Fehler Meldung für obligatorisch Bestätigung Kontrolle.                                                   | `CMS /Etiketten/RequiredFieldMessage` |
-| `confirmationPanelStyleClass` | Stil Klasse für die Bestätigung Diskussionsrunde.                                                         |                                       |
-| `confirmationLabel`           | Etikett für die Bestätigung Optionen.                                                                     |                                       |
-| `approvalHistoryRendered`     | Fahne zu #ausschmelzen die Genehmigung Geschichte Tisch.                                                  | `Wahr`                                |
+| Name                                  | Beschreibung                                                                                                  | Standard                           |
+| ------------------------------------- | ------------------------------------------------------------------------------------------------------------- | ---------------------------------- |
+| `managedBean`                         | Eine Bean erweitert die Klasse „com.axonivy.utils.approvaldecision.managedbean.AbstractApprovalDecisionBean”. |                                    |
+| `isReadOnly`                          | Konfiguriert die Komponente als schreibgeschützt.                                                             | `false`                            |
+| `fieldsetToggleable`                  | Macht das Feld umschaltbar.                                                                                   | `false`                            |
+| `fieldsetLegend`                      | Legendentext des Feldsatzes.                                                                                  | `Genehmigungsentscheidung`         |
+| `fieldsetStyleClass`                  | Stilklasse des Feldsatzes.                                                                                    |                                    |
+| `Überschrift`                         | Überschriftstext innerhalb der Komponente.                                                                    |                                    |
+| `headlinePanelStyleClass`             | Stilklasse für das Feld der Überschrift.                                                                      |                                    |
+| `helpText`                            | Hilfetext innerhalb der Komponente.                                                                           |                                    |
+| `helpTextPanelStyleClass`             | Stilklasse für das Feld des Hilfetextes.                                                                      |                                    |
+| `helpTextStyleClass`                  | Stilklasse für den Hilfetext.                                                                                 |                                    |
+| `validatorId`                         | ID des Validators.                                                                                            | `approvalDecisionValidator`        |
+| `Entscheidungsbezeichnung`            | Bezeichnung für die Entscheidungsoptionen.                                                                    |                                    |
+| `Entscheidung erforderlich`           | Obligatorische Überprüfung für die Entscheidung.                                                              | `true`                             |
+| `Entscheidung getroffen`              | Flag zum Rendern von Entscheidungsoptionen.                                                                   | `true`                             |
+| `Entscheidung erforderlich`           | Fehlermeldung für obligatorische Entscheidungsprüfung.                                                        | `CMS /Labels/RequiredFieldMessage` |
+| `decisionPanelStyleClass`             | Stilklasse für das Entscheidungsfeld.                                                                         |                                    |
+| `listenerOnDecisionAction`            | Der Listener wird ausgelöst, wenn eine Entscheidung ausgewählt wird.                                          |                                    |
+| `componentToUpdateOnDecision`         | Komponenten, die aktualisiert werden müssen, wenn eine Entscheidung getroffen wird.                           | `@this`                            |
+| `Entscheidungs-Kommentar-Bezeichnung` | Bezeichnung für den Kommentar.                                                                                | `CMS /Labels/Kommentar`            |
+| `Kommentar erforderlich`              | Obligatorische Überprüfung für Kommentare.                                                                    | `true`                             |
+| `commentRendered`                     | Flag zum Rendern von Kommentaren.                                                                             | `true`                             |
+| `commentRequiredMessage`              | Fehlermeldung für obligatorische Kommentarprüfung.                                                            | `CMS /Labels/RequiredFieldMessage` |
+| `commentPanelStyleClass`              | Stilklasse für das Kommentarfeld.                                                                             |                                    |
+| `Bestätigung erforderlich`            | Obligatorische Überprüfung der Bestätigungsoptionen.                                                          | `false`                            |
+| `confirmationRequiredMessage`         | Fehlermeldung für obligatorische Bestätigungsprüfung.                                                         | `CMS /Labels/RequiredFieldMessage` |
+| `confirmationPanelStyleClass`         | Stilklasse für das Bestätigungsfeld.                                                                          |                                    |
+| `confirmationLabel`                   | Bezeichnung für die Bestätigungsoptionen.                                                                     |                                    |
+| `approvalHistoryRendered`             | Flag zum Rendern der Tabelle mit dem Genehmigungsverlauf.                                                     | `true`                             |
 
 #### Facetten
 
 ---
 
-- `customHeadline`: #Benutzerdefiniert Schlagzeile. Benutz dies als brauchst du
-  eine More verfeinert Schlagzeile als simplen Text.
+- `customHeadline`: Benutzerdefinierte Überschrift. Verwenden Sie diese Option,
+  wenn Sie eine ausführlichere Überschrift als einfachen Text benötigen.
 
 Beispiel:
 
@@ -149,8 +149,8 @@ Beispiel:
     	</f:facet>
     </ic:com.axonivy.utils.approvaldecision.ApprovalDecision>
 
-- `customHelpText`: #Benutzerdefiniert Hilfe Text. Benutz dies als brauchst du
-  eine More verfeinert Hilfe Text als simplen Text.
+- `customHelpText`: Benutzerdefinierter Hilfetext. Verwenden Sie diesen, wenn
+  Sie einen ausführlicheren Hilfetext als einfachen Text benötigen.
 
 Beispiel:
 
@@ -161,10 +161,10 @@ Beispiel:
     	</f:facet>
     </ic:com.axonivy.utils.approvaldecision.ApprovalDecision>
 
-- `customContent`: #Benutzerdefiniert Inhalt für speziell Forderungen.
+- `customContent`: Benutzerdefinierter Inhalt für spezielle Anforderungen.
 
-Beispiel: Der folgende Code fügt zu das Etikett `#Email Adresse von relevant
-Abteilung` und die dropdown Liste zu dem Inhalt.
+Beispiel: Der folgende Code fügt die Beschriftung „ `“ (E-Mail-Adresse der
+zuständigen Abteilung` ) und die Dropdown-Liste zum Inhalt hinzu.
 
     <ic:com.axonivy.utils.approvaldecision.ApprovalDecision id="approvalDecision"
     	managedBean="#{managedBean.approvalDecisionBean}">
@@ -200,21 +200,21 @@ Abteilung` und die dropdown Liste zu dem Inhalt.
 
 ![](./images/2-request-custom-content.png)
 
-#### Pass an Genehmigung Geschichte Tisch (Optional)
+#### Anpassen der Tabelle „Genehmigungshistorie“ (optional)
 
-Die Genehmigung Geschichte Tisch ist anfänglich bei Genehmigung geordnet Datum
-in #absteigend Befehl. Zu anpassen der Sorte Befehl, Start ausschalten mal die
-#voreingestellt Sorte durch #außer Kraft setzend die Methode
-`isApprovalHistoryTableSortDescending()`.
+Die Tabelle „Genehmigungshistorie“ ist zunächst nach Genehmigungsdatum in
+absteigender Reihenfolge sortiert. Um die Sortierung anzupassen, deaktivieren
+Sie zunächst die Standardsortierung, indem Sie die Methode „
+`isApprovalHistoryTableSortDescending()“ überschreiben „` “.
 
     @Override public boolean isApprovalHistoryTableSortDescending() { return false; }
 
-#Nächste, implementier die #benutzerdefiniert Sorte mal #außer Kraft setzend die
-Methode `getApprovalHistoryTableSortField()`. Die folgenden Felder sind
-unterstützt zu ordnen:
+Implementieren Sie als Nächstes die benutzerdefinierte Sortierung, indem Sie die
+Methode `getApprovalHistoryTableSortField()` überschreiben. Die folgenden Felder
+werden für die Sortierung unterstützt:
 
-- displayApprovalDate: Genehmigung Datum.
-- displayUserName: Name von dem Schöpfer.
+- displayApprovalDate: Genehmigungsdatum.
+- displayUserName: Name des Erstellers.
 - Kommentar: Kommentar.
 
 Beispiel:
