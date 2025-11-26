@@ -29,7 +29,7 @@ Anpassungen mit demselben Prozessschritt:
 
 ![](./images/5-request-confirmation.png)
 
-## Einrichtung
+## Setup
 
 In der Demo finden Sie Beispiele für drei Konfigurationen: eine einfache
 Konfiguration, eine erweiterte Konfiguration von BaseRequest mit
