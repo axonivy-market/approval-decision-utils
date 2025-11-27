@@ -1,14 +1,17 @@
-# Approval Decision Utils
+# Genehmigen-Entscheidung Utils
 
-Axon Ivy's Approval Decision Utils bietet einen standardisierten Ansatz zur Implementierung von Genehmigungen in jedem Geschäftsprozess. 
+Axon Ivy's Approval Decision Utils bietet einen standardisierten Ansatz für die
+Implementierung Ihrer Genehmigungen in jedem Geschäftsprozess. Diese Komponente:
 
-Diese Komponente:
-
-- gibt Dir ein Template für Entscheidungs- und Bestätigungsprozesse.
-- implementiert eine Kommentarfunktion für eine bessere Dokumentation.
-- bietet eine klare Übersicht über die laufende Genehmigungshistorie, um regulatorische, Compliance- und Transparenzanforderungen zu erfüllen.
+- Bietet Ihnen ein Standardmuster für Entscheidungen und Bestätigungen.
+- Implementiert eine Kommentarfunktion für eine bessere Dokumentation.
+- Bietet einen klaren Überblick über den laufenden Genehmigungsprozess, um
+  regulatorische, Compliance- und Transparenzanforderungen zu erfüllen.
 
 ## Demo
+Die Demo zeigt, wie Sie Approval-Decision-Utilities in Ihr Projekt integrieren
+können. Es gibt 3 Demos: 1 für eine einfache Einrichtung, 2 für verschiedene
+Anpassungen mit demselben Prozessschritt:
 
 ### 1. Entscheidungsoption anzeigen
 
@@ -18,66 +21,58 @@ Diese Komponente:
 
 ![](./images/3-request-validate.png)
 
-### 3. Genehmigungshistorie nachverfolgen
+### 3. Genehmigungshistorie verfolgen
 
 ![](./images/4-request-history.png)
 
-### 4. Bestätigungs-Checkbox auswählen
+### 4. Bestätigungsfeld auswählen
 
 ![](./images/5-request-confirmation.png)
 
 ## Setup
 
-### Vorgehensweise
+In der Demo finden Sie Beispiele für drei Konfigurationen: eine einfache
+Konfiguration, eine erweiterte Konfiguration von BaseRequest mit
+Genehmigungs-Historie (CompositeTicketRequest) und eine separate Konfiguration:
+Entity TicketRequest ist eigenständig mit BaseRequest.
 
-Entscheidungsdaten werden in einer Datenbanktabelle namens `ApprovalHistory` gespeichert. Diese Tabelle speichert die ausgewählten Entscheidungen, Kommentare, Genehmigungsdaten und Bestätigungen.
+Um Approval Decision Utilities in Ihr Projekt zu integrieren und zu verwenden,
+müssen Sie eine Bean für die UI-Komponente `ApprovalDecision bereitstellen.`
 
-Die Daten aus dieser Tabelle werden verwendet, um den Bereich der Genehmigungshistorie zu füllen.
+#### Stellen Sie Bean für die UI-Komponente „ `ApprovalDecision” bereit.`
 
-### Datenbank einrichten
+Verwenden Sie die integrierte „ `“ „DefaultApprovalDecisionBean“ „` “ wie in der
+einfachen Demo. Oder erstellen Sie eine Bean-Klasse, die „ `“
+„AbstractApprovalDecisionBean“ „` “ mit den Konstruktorparametern „histories“,
+„decisions“ und „confirmations“ erweitert.
 
-- Erstelle die Tabelle `ApprovalHistory` mit Standardspalten zur Speicherung der Entscheidungsdaten. Zusätzliche Spalten können je nach Geschäftsanforderungen hinzugefügt werden. Du kannst auch den Tabellennamen ändern.
-- Die Tabelle `RequestApprovalHistory` stellt die Beziehung zwischen Deinen Geschäftsdaten und der Genehmigungshistorie her.
-
-Zum Beispiel, wenn Deine Geschäftsdaten in einer Tabelle namens `TicketRequest` gespeichert sind. Das folgende Skript erstellt Tabellen und stellt die Beziehung her.
-
-    create table ApprovalHistory (
-    	id varchar(32) not null,
-    	...
-    );
-
-    create table RequestApprovalHistory (
-    	requestId varchar(32) not null,
-    	approvalHistoryId varchar(32) not null,
-    	primary key (requestId, approvalHistoryId)
-    )
-
-    alter table RequestApprovalHistory
-       add constraint fk_requestApprovalHistory_request
-       foreign key (requestId)
-       references TicketRequest(id)
-
-    alter table RequestApprovalHistory
-       add constraint fk_requestApprovalHistory_approvalHistory
-       foreign key (approvalHistoryId)
-       references ApprovalHistory(id);
-
-### Implementiere das Java-Backend
-
-Die Komponente verwendet die [Axon Ivy Persistence Utils](https://github.com/axonivy-market/persistence-utils) Bibliothek, um mit der Datenbank zu interagieren.
-
-- Deine Geschäftsentität muss die Klasse `BaseRequest` erweitern.
-- Die Entität `ApprovalHistory` muss die Klasse `BaseApprovalHistory` erweitern.
+Es gibt eine vordefinierte Aufzählungs `ApprovalDecisionOption` (Werte:
+APPROVAL, REJECT) kann als Entscheidung der Bean verwendet werden.
 
 Beispiel:
 
-    public class TicketRequest extends BaseRequest<ApprovalHistory>{}
-    public class ApprovalHistory extends BaseApprovalHistory{}
+    public class SimpleApprovalBean extends AbstractApprovalDecisionBean<ApprovalHistory, Long> {
 
-### Integriere die Genehmigungsentscheidung in den HTML-Dialog
+    	private static final long serialVersionUID = 1L;
 
-Beispiel:
+    	public SimpleApprovalBean() {
+    		super(null, List.of(ApprovalDecisionOption.values()), null);
+    	}
 
+    	@Override
+    	protected Class<ApprovalHistory> getApprovalHistoryType() {
+    		return ApprovalHistory.class;
+    	}
+    }
+
+Wenn Sie Ihre eigene Enumeration verwenden, überschreiben Sie bitte die
+Bean-Methode „ `getDecisionLabel(String decisionName)` ”, wobei „decisionName”
+der Wertestring Ihrer benutzerdefinierten Enumeration ist.
+
+In der Demo verwendet die Bean `TicketApprovalDecisionBean`
+Entscheidungsoptionen aus der Enumeration `TicketProcessApprovalDecision`.
+
+### Die UI-Komponente
      <ic:com.axonivy.utils.approvaldecision.ApprovalDecision
     	id="approvalDecision"
     	managedBean="#{managedBean.approvalDecisionBean}"
@@ -85,10 +80,10 @@ Beispiel:
     	fieldsetLegend="Request Decision"
     	fieldsetToggleable="#{true}"
     	fieldsetStyleClass="p-mt-3"
-    	headline="Schritt 1: Bitte wähle eine Entscheidungsoption"
+    	headline="Step 1: Pelease select a decision option"
     	headlinePanelStyleClass=""
     	headlineStyleClass="p-text-bold"
-    	helpText="Mein Hilfetext"
+    	helpText="My help text"
     	helpTextPanelStyleClass=""
     	helpTextStyleClass=""
     	decisionRendered="#{managedBean.contentState.decisionRendered}"
@@ -102,114 +97,74 @@ Beispiel:
 
 ![](./images/1-request.png)
 
-### Managed Bean erstellen
+#### Attribute
 
-Erstelle die Managed Bean dieser Komponente, indem Du die Klasse `com.axonivy.utils.approvaldecision.managedbean.AbstractApprovalDecisionBean` erweiterst.
+AttributBeschreibungStandardwertmanagedBeanErforderlich. Muss
+AbstractApprovalDecisionBean erweitern.
 
-Standardmäßig verwendet die Komponente das Enum `com.axonivy.utils.approvaldecision.enums.ApprovalDecisionOption`, um Entscheidungsoptionen zu erhalten. Falls Du Dein eigenes Enum für die Optionen verwenden möchtest, überschreibe die Methoden `getDecisionLabel()` und `getDecisions()`.
+| Name                                  | Beschreibung                                                                                                  | Standard                           |
+| ------------------------------------- | ------------------------------------------------------------------------------------------------------------- | ---------------------------------- |
+| `managedBean`                         | Eine Bean erweitert die Klasse „com.axonivy.utils.approvaldecision.managedbean.AbstractApprovalDecisionBean”. |                                    |
+| `isReadOnly`                          | Konfiguriert die Komponente als schreibgeschützt.                                                             | `false`                            |
+| `fieldsetToggleable`                  | Macht das Feld umschaltbar.                                                                                   | `false`                            |
+| `fieldsetLegend`                      | Legendentext des Feldsatzes.                                                                                  | `Genehmigungsentscheidung`         |
+| `fieldsetStyleClass`                  | Stilklasse des Feldsatzes.                                                                                    |                                    |
+| `Überschrift`                         | Überschriftstext innerhalb der Komponente.                                                                    |                                    |
+| `headlinePanelStyleClass`             | Stilklasse für das Feld der Überschrift.                                                                      |                                    |
+| `helpText`                            | Hilfetext innerhalb der Komponente.                                                                           |                                    |
+| `helpTextPanelStyleClass`             | Stilklasse für das Feld des Hilfetextes.                                                                      |                                    |
+| `helpTextStyleClass`                  | Stilklasse für den Hilfetext.                                                                                 |                                    |
+| `validatorId`                         | ID des Validators.                                                                                            | `approvalDecisionValidator`        |
+| `Entscheidungsbezeichnung`            | Bezeichnung für die Entscheidungsoptionen.                                                                    |                                    |
+| `Entscheidung erforderlich`           | Obligatorische Überprüfung für die Entscheidung.                                                              | `true`                             |
+| `Entscheidung getroffen`              | Flag zum Rendern von Entscheidungsoptionen.                                                                   | `true`                             |
+| `Entscheidung erforderlich`           | Fehlermeldung für obligatorische Entscheidungsprüfung.                                                        | `CMS /Labels/RequiredFieldMessage` |
+| `decisionPanelStyleClass`             | Stilklasse für das Entscheidungsfeld.                                                                         |                                    |
+| `listenerOnDecisionAction`            | Der Listener wird ausgelöst, wenn eine Entscheidung ausgewählt wird.                                          |                                    |
+| `componentToUpdateOnDecision`         | Komponenten, die aktualisiert werden müssen, wenn eine Entscheidung getroffen wird.                           | `@this`                            |
+| `Entscheidungs-Kommentar-Bezeichnung` | Bezeichnung für den Kommentar.                                                                                | `CMS /Labels/Kommentar`            |
+| `Kommentar erforderlich`              | Obligatorische Überprüfung für Kommentare.                                                                    | `true`                             |
+| `commentRendered`                     | Flag zum Rendern von Kommentaren.                                                                             | `true`                             |
+| `commentRequiredMessage`              | Fehlermeldung für obligatorische Kommentarprüfung.                                                            | `CMS /Labels/RequiredFieldMessage` |
+| `commentPanelStyleClass`              | Stilklasse für das Kommentarfeld.                                                                             |                                    |
+| `Bestätigung erforderlich`            | Obligatorische Überprüfung der Bestätigungsoptionen.                                                          | `false`                            |
+| `confirmationRequiredMessage`         | Fehlermeldung für obligatorische Bestätigungsprüfung.                                                         | `CMS /Labels/RequiredFieldMessage` |
+| `confirmationPanelStyleClass`         | Stilklasse für das Bestätigungsfeld.                                                                          |                                    |
+| `confirmationLabel`                   | Bezeichnung für die Bestätigungsoptionen.                                                                     |                                    |
+| `approvalHistoryRendered`             | Flag zum Rendern der Tabelle mit dem Genehmigungsverlauf.                                                     | `true`                             |
 
-### Genehmigungshistorien in Deiner Managed Bean speichern/übermitteln
-
-Behandle das Speichern/Übermitteln, indem Du die Methoden der Managed Bean aufrufst, die im vorherigen Schritt erstellt wurde:
-
-- `handleApprovalHistoryBeforeSave()`: Wird ausgelöst, wenn die Aktion `Speichern` aufgerufen wird.
-- `handleApprovalHistoryBeforeSubmit()`: Wird ausgelöst, wenn die Aktion `Übermitteln` aufgerufen wird.
-
-Fahre fort, die Genehmigungshistorien der Entität zuzuordnen und zu speichern.
-
-Beispiel: In der Managed Bean `TicketProcessBean`:
-
-    public void save() {
-    	approvalDecisionBean.handleApprovalHistoryBeforeSave(this.request.getApprovalHistories());
-    	handleSaving();
-    	TicketProcessUtils.showInfo();
-    }
-    private void handleSaving() {
-    	TicketRequest saved = TicketRequestDAO.getInstance().save(this.request);
-    	setRequest(saved);
-    	this.approvalDecisionBean.setApprovalHistory(this.request.getApprovalHistories().stream()
-    			.filter(p -> p.getIsEditing()).findFirst().orElse(new ApprovalHistory()));
-    }
-
-### Genehmigungshistorientabelle anpassen (Optional)
-
-Die Genehmigungshistorientabelle wird standardmäßig nach dem Genehmigungsdatum in absteigender Reihenfolge sortiert. Um die Sortierreihenfolge anzupassen, deaktiviere zuerst die Standardsortierung, indem Du die Methode `isApprovalHistoryTableSortDescending()` überschreibst.
-
-    @Override public boolean isApprovalHistoryTableSortDescending() { return false; }
-
-Implementiere anschließend die benutzerdefinierte Sortierung, indem Du die Methode `getApprovalHistoryTableSortField()` überschreibst. Die folgenden Felder werden zur Sortierung unterstützt:
-
-- displayApprovalDate: Genehmigungsdatum.
-- displayUserName: Name des Erstellers.
-- comment: Kommentar.
-
-Beispiel:
-
-    @Override public String getApprovalHistoryTableSortField() { return "displayUserName"; }
-
-### Attribute
-
-- `managedBean`: Ist erforderlich und muss die Klasse `com.axonivy.utils.approvaldecision.managedbean.AbstractApprovalDecisionBean` erweitern.
-- `isReadOnly`: Konfiguriert die Komponente als schreibgeschützt. Standardmäßig ist der Wert `false`.
-- `fieldsetToggleable`: Macht das Fieldset umschaltbar. Standardmäßig ist der Wert `false`.
-- `fieldsetLegend`: Legendentext des Fieldsets. Standardmäßig ist der Wert `Approval decision`.
-- `fieldsetStyleClass`: Stilklasse des Fieldsets.
-- `headline`: Überschriftstext innerhalb der Komponente.
-- `headlinePanelStyleClass`: Stilklasse für das Panel der Überschrift.
-- `helpText`: Hilfetext innerhalb der Komponente.
-- `helpTextPanelStyleClass`: Stilklasse für das Panel des Hilfetextes.
-- `helpTextStyleClass`: Stilklasse für den Hilfetext.
-- `validatorId`: ID des Validators, Standardwert ist `approvalDecisionValidator` (`com.axonivy.utils.approvaldecision.validation.ApprovalDecisionValidator`).
-- `decisionLabel`: Beschriftung für die Entscheidungsoptionen.
-- `decisionRequired`: Flag für eine obligatorische Prüfung der Entscheidung. Standardwert ist `true`.
-- `decisionRendered`: Flag zum Anzeigen der Entscheidungsoptionen. Standardwert ist `true`.
-- `decisionRequiredMessage`: Fehlermeldung, die bei einer obligatorischen Prüfung der Entscheidungsoptionen angezeigt wird. Der Standardwert ist das CMS `/Labels/RequiredFieldMessage`.
-- `decisionPanelStyleClass`: Stilklasse für das Panel der Entscheidungsoptionen.
-- `listenerOnDecisionAction`: Listener-Ereignis, das ausgelöst wird, wenn eine Entscheidung ausgewählt wird.
-- `componentToUpdateOnDecision`: Komponenten, die aktualisiert werden sollen, wenn eine Entscheidung ausgewählt wird. Standardwert ist `@this`.
-- `decisionCommentLabel`: Beschriftung für den Kommentar. Standardwert ist das CMS `/Labels/Comment`.
-- `commentRequired`: Flag für eine obligatorische Prüfung des Kommentars. Standardwert ist `true`.
-- `commentRendered`: Flag zum Anzeigen des Kommentars. Standardwert ist `true`.
-- `commentRequiredMessage`: Fehlermeldung, die bei einer obligatorischen Prüfung des Kommentars angezeigt wird. Der Standardwert ist das CMS `/Labels/RequiredFieldMessage`.
-- `commentPanelStyleClass`: Stilklasse für das Kommentarpanel.
-- `confirmationRequired`: Flag für eine obligatorische Prüfung der Bestätigungsoptionen. Standardwert ist `false`.
-- `confirmationRequiredMessage`: Fehlermeldung, die bei einer obligatorischen Prüfung der Bestätigungsoptionen angezeigt wird. Der Standardwert ist das CMS `/Labels/RequiredFieldMessage`.
-- `confirmationPanelStyleClass`: Stilklasse für das Panel der Bestätigungsoptionen.
-- `confirmationLabel`: Beschriftung für die Bestätigungsoptionen.
-- `approvalHistoryRendered`: Flag zum Anzeigen der Genehmigungshistorientabelle. Standardwert ist `true`.
-- `approvalHistoryPanelStyleClass`: Stilklasse für das Panel der Genehmigungshistorientabelle.
-
-
-
-Facets
+#### Facetten
 
 ---
 
-- `customHeadline`: Benutzerdefinierte Überschrift. Verwende dies, wenn Du eine aufwendigere Überschrift als einfachen Text benötigst.
+- `customHeadline`: Benutzerdefinierte Überschrift. Verwenden Sie diese Option,
+  wenn Sie eine ausführlichere Überschrift als einfachen Text benötigen.
 
 Beispiel:
 
     <ic:com.axonivy.utils.approvaldecision.ApprovalDecision id="approvalDecision"
     managedBean="#{managedBean.approvalDecisionBean}">
     	<f:facet name="customHeadline">
-    	  <p>Bitte überprüfe diese <a href="www.google.com">E-Mail</a>, bevor Du fortfährst</p>
+    	  <p>Please check this <a href="www.google.com">Email</a> before proceed</p>
     	</f:facet>
     </ic:com.axonivy.utils.approvaldecision.ApprovalDecision>
 
-- `customHelpText`: Benutzerdefinierter Hilfetext. Verwende dies, wenn Du einen aufwendigeren Hilfetext als einfachen Text benötigst.
+- `customHelpText`: Benutzerdefinierter Hilfetext. Verwenden Sie diesen, wenn
+  Sie einen ausführlicheren Hilfetext als einfachen Text benötigen.
 
 Beispiel:
 
     <ic:com.axonivy.utils.approvaldecision.ApprovalDecision id="approvalDecision"
     managedBean="#{managedBean.approvalDecisionBean}">
     	<f:facet name="customHelpText">
-    	  <p>Bitte überprüfe diese <a href="www.google.com">E-Mail</a>, bevor Du fortfährst</p>
+    	  <p>Please check this <a href="www.google.com">Email</a> before proceed</p>
     	</f:facet>
     </ic:com.axonivy.utils.approvaldecision.ApprovalDecision>
 
 - `customContent`: Benutzerdefinierter Inhalt für spezielle Anforderungen.
 
-Beispiel: Der folgende Code fügt das Label `E-Mail-Adresse der relevanten Abteilung` und die Dropdown-Liste zum Inhalt hinzu.
+Beispiel: Der folgende Code fügt die Beschriftung „ `“ (E-Mail-Adresse der
+zuständigen Abteilung` ) und die Dropdown-Liste zum Inhalt hinzu.
 
     <ic:com.axonivy.utils.approvaldecision.ApprovalDecision id="approvalDecision"
     	managedBean="#{managedBean.approvalDecisionBean}">
@@ -221,7 +176,7 @@ Beispiel: Der folgende Code fügt das Label `E-Mail-Adresse der relevanten Abtei
     			rendered="#{managedBean.contentState.showDropdownOfMails}">
     			<div class="p-field p-text-left p-text-md-right p-col-12 p-md-2">
     			  <p:outputLabel for="dropdownlist-mail"
-    				value="E-Mail-Adresse der relevanten Abteilung">
+    				value="Email address of relevant department">
     				<span class="ui-outputlabel-rfi">*</span>
     			  </p:outputLabel>
     			</div>
@@ -244,3 +199,24 @@ Beispiel: Der folgende Code fügt das Label `E-Mail-Adresse der relevanten Abtei
     </ic:com.axonivy.utils.approvaldecision.ApprovalDecision>
 
 ![](./images/2-request-custom-content.png)
+
+#### Anpassen der Tabelle „Genehmigungshistorie“ (optional)
+
+Die Tabelle „Genehmigungshistorie“ ist zunächst nach Genehmigungsdatum in
+absteigender Reihenfolge sortiert. Um die Sortierung anzupassen, deaktivieren
+Sie zunächst die Standardsortierung, indem Sie die Methode „
+`isApprovalHistoryTableSortDescending()“ überschreiben „` “.
+
+    @Override public boolean isApprovalHistoryTableSortDescending() { return false; }
+
+Implementieren Sie als Nächstes die benutzerdefinierte Sortierung, indem Sie die
+Methode `getApprovalHistoryTableSortField()` überschreiben. Die folgenden Felder
+werden für die Sortierung unterstützt:
+
+- displayApprovalDate: Genehmigungsdatum.
+- displayUserName: Name des Erstellers.
+- Kommentar: Kommentar.
+
+Beispiel:
+
+    @Override public String getApprovalHistoryTableSortField() { return "displayUserName"; }
