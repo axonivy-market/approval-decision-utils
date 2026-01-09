@@ -7,14 +7,14 @@
   <packaging>pom</packaging>
 
   <modules>
-    <module>${project.name}</module>
-    <module>${project.name}-demo</module>
-    <module>${project.name}-test</module>
-    <module>${project.name}-product</module>
+    <module>approval-decision-utils</module>
+    <module>approval-decision-utils-demo</module>
+    <module>approval-decision-utils-test</module>
+    <module>approval-decision-utils-product</module>
   </modules>
 
   <scm>
-    <developerConnection>scm:git:https://github.com/axonivy-market/${project.name}.git</developerConnection>
+    <developerConnection>scm:git:https://github.com/axonivy-market/approval-decision-utils.git</developerConnection>
     <tag>HEAD</tag>
   </scm>
 
