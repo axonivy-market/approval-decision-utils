@@ -34,7 +34,7 @@ To integrate and use Approval Decision Utils in your project, you must provide a
 
 #### Provide bean for the UI Component `ApprovalDecision`
 
-Use the buit-in `DefaultApprovalDecisionBean` as in simple demo.
+Use the built-in `DefaultApprovalDecisionBean` as in simple demo.
 Or create a bean class extends `AbstractApprovalDecisionBean` with constructor parameters: histories, decisions, confirmations.
 
 There are a pre-defined enum `ApprovalDecisionOption` (values: APPROVAL, REJECT) can be used as decisions of the bean.
@@ -67,7 +67,7 @@ In the Demo, the bean `TicketApprovalDecisionBean` uses decision options from th
     	fieldsetLegend="Request Decision"
     	fieldsetToggleable="#{true}"
     	fieldsetStyleClass="p-mt-3"
-    	headline="Step 1: Pelease select a decision option"
+    	headline="Step 1: Please select a decision option"
     	headlinePanelStyleClass=""
     	headlineStyleClass="p-text-bold"
     	helpText="My help text"
@@ -172,7 +172,7 @@ Example: The following code adds the label `Email address of relevant department
     				  value="#{managedBean.departmentMails.entrySet()}"
     				  var="department" itemLabel="#{department.key}"
     				  itemValue="#{department.value}" />
-    				<f:validator validatorId="aprovalDecisionValidator" />
+    				<f:validator validatorId="approvalDecisionValidator" />
     			  </p:selectOneMenu>
     			  <p:message for="dropdownlist-mail" />
     			</div>
