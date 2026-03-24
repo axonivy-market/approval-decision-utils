@@ -234,7 +234,7 @@ Beispiel: Der folgende Code fügt das Label `E-Mail-Adresse der relevanten Abtei
     				  value="#{managedBean.departmentMails.entrySet()}"
     				  var="department" itemLabel="#{department.key}"
     				  itemValue="#{department.value}" />
-    				<f:validator validatorId="aprovalDecisionValidator" />
+    				<f:validator validatorId="approvalDecisionValidator" />
     			  </p:selectOneMenu>
     			  <p:message for="dropdownlist-mail" />
     			</div>
