@@ -189,7 +189,7 @@ zuständigen Abteilung` ) und die Dropdown-Liste zum Inhalt hinzu.
     				  value="#{managedBean.departmentMails.entrySet()}"
     				  var="department" itemLabel="#{department.key}"
     				  itemValue="#{department.value}" />
-    				<f:validator validatorId="aprovalDecisionValidator" />
+    				<f:validator validatorId="approvalDecisionValidator" />
     			  </p:selectOneMenu>
     			  <p:message for="dropdownlist-mail" />
     			</div>
