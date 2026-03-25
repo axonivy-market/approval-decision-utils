@@ -41,10 +41,9 @@ müssen Sie eine Bean für die UI-Komponente `ApprovalDecision bereitstellen.`
 
 #### Stellen Sie Bean für die UI-Komponente „ `ApprovalDecision” bereit.`
 
-Verwenden Sie die integrierte „ `“ „DefaultApprovalDecisionBean“ „` “ wie in der
-einfachen Demo. Oder erstellen Sie eine Bean-Klasse, die „ `“
-„AbstractApprovalDecisionBean“ „` “ mit den Konstruktorparametern „histories“,
-„decisions“ und „confirmations“ erweitert.
+Use the built-in `DefaultApprovalDecisionBean` as in simple demo. Or create a
+bean class extends `AbstractApprovalDecisionBean` with constructor parameters:
+histories, decisions, confirmations.
 
 Es gibt eine vordefinierte Aufzählungs `ApprovalDecisionOption` (Werte:
 APPROVAL, REJECT) kann als Entscheidung der Bean verwendet werden.
@@ -73,14 +72,14 @@ In der Demo verwendet die Bean `TicketApprovalDecisionBean`
 Entscheidungsoptionen aus der Enumeration `TicketProcessApprovalDecision`.
 
 ### Die UI-Komponente
-     <ic:com.axonivy.utils.approvaldecision.ApprovalDecision
+    <ic:com.axonivy.utils.approvaldecision.ApprovalDecision
     	id="approvalDecision"
     	managedBean="#{managedBean.approvalDecisionBean}"
     	validatorId="#{managedBean.approvalDecisionBean.validatorId}"
     	fieldsetLegend="Request Decision"
     	fieldsetToggleable="#{true}"
     	fieldsetStyleClass="p-mt-3"
-    	headline="Step 1: Pelease select a decision option"
+    	headline="Step 1: Please select a decision option"
     	headlinePanelStyleClass=""
     	headlineStyleClass="p-text-bold"
     	helpText="My help text"
