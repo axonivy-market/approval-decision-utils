@@ -1,13 +1,15 @@
 package com.axonivy.utils.approvaldecision.validation;
 
-import javax.faces.component.UIComponent;
-import javax.faces.context.FacesContext;
-import javax.faces.validator.FacesValidator;
-import javax.faces.validator.Validator;
-import javax.faces.validator.ValidatorException;
+import jakarta.faces.component.UIComponent;
+import jakarta.faces.context.FacesContext;
+import jakarta.faces.validator.FacesValidator;
+import jakarta.faces.validator.Validator;
+import jakarta.faces.validator.ValidatorException;
+import jakarta.enterprise.context.ApplicationScoped;
 
-@FacesValidator(value = "approvalDecisionValidator")
-public class ApprovalDecisionValidator implements Validator {
+@FacesValidator(value = "approvalDecisionValidator", managed = true)
+@ApplicationScoped
+public class ApprovalDecisionValidator implements Validator<Object> {
 
 	@Override
 	public void validate(FacesContext context, UIComponent component, Object value) throws ValidatorException {

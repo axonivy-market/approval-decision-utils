@@ -1,0 +1,21 @@
+Enums:
+  com:
+    axonivy:
+      utils:
+        approvaldecision:
+          enums:
+            ApprovalDecisionOption:
+              APPROVE:
+                name: Approve
+              REJECT:
+                name: Reject
+Labels:
+  ApprovalHistory: Approval history
+  Author: Author
+  Comment: Comment
+  CounterTemplate: '{0} characters remaining.'
+  Date: Date
+  DateTimePattern: dd/MM/yyyy HH:mm
+  Decision: Decision
+  GrowlForRequireField: Some mandatory fields or preconditions are missing, please check.
+  RequiredFieldMessage: This field is required
