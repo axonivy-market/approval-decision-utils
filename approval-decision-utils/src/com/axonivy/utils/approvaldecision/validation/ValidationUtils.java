@@ -5,12 +5,6 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.Optional;
 
-import jakarta.faces.application.FacesMessage;
-import jakarta.faces.component.UIComponent;
-import jakarta.faces.component.UIInput;
-import jakarta.faces.context.FacesContext;
-import jakarta.faces.validator.ValidatorException;
-
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.primefaces.component.selectbooleancheckbox.SelectBooleanCheckbox;
@@ -18,6 +12,11 @@ import org.primefaces.component.selectmanycheckbox.SelectManyCheckbox;
 import org.primefaces.component.selectonemenu.SelectOneMenu;
 
 import ch.ivyteam.ivy.environment.Ivy;
+import jakarta.faces.application.FacesMessage;
+import jakarta.faces.component.UIComponent;
+import jakarta.faces.component.UIInput;
+import jakarta.faces.context.FacesContext;
+import jakarta.faces.validator.ValidatorException;
 
 public class ValidationUtils {
 
@@ -33,7 +32,7 @@ public class ValidationUtils {
 	}
 
 	public static boolean isButtonClicked(FacesContext context, String buttonId) {
-		String sourceId = context.getExternalContext().getRequestParameterValuesMap().get("javax.faces.source")[0];
+		    String sourceId = context.getExternalContext().getRequestParameterValuesMap().get("jakarta.faces.source")[0];
 		boolean isButtonClicked = false;
 		if (sourceId.contentEquals(buttonId)) {
 			isButtonClicked = true;
