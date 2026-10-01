@@ -1,9 +1,0 @@
-{
-  "$schema" : "https://json-schema.axonivy.com/14.0-dev/project/data-class.json",
-  "simpleName" : "SimpleResultFormData",
-  "namespace" : "com.axonivy.utils.approvaldecision.demo.simple.SimpleResultForm",
-  "fields" : [ {
-    "name" : "bean",
-    "type" : "com.axonivy.utils.approvaldecision.managedbean.DefaultApprovalDecisionBean"
-  } ]
-}

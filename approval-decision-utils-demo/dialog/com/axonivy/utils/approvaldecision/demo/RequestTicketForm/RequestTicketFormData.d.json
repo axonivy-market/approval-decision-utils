@@ -1,0 +1,13 @@
+{
+  "$schema" : "https://json-schema.axonivy.com/14.0/project/data-class.json",
+  "simpleName" : "RequestTicketFormData",
+  "namespace" : "com.axonivy.utils.approvaldecision.demo.RequestTicketForm",
+  "fields" : [ {
+    "name" : "bean",
+    "type" : "com.axonivy.utils.approvaldecision.demo.managedbean.TicketProcessBean",
+    "modifiers" : [ ]
+  }, {
+    "name" : "decisionResult",
+    "modifiers" : [ ]
+  } ]
+}
