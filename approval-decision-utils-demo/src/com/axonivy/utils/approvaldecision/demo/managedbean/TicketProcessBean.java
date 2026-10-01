@@ -1,6 +1,5 @@
 package com.axonivy.utils.approvaldecision.demo.managedbean;
 
-import java.net.MalformedURLException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -94,11 +93,6 @@ public class TicketProcessBean {
 		}
 		approvalDecisionBean.handleForSubmit();
 		handleSaving();
-	}
-
-	public void cancel() throws MalformedURLException {
-		Ivy.wfTask().reset();
-		TicketProcessUtils.navigateToHomePage();
 	}
 
 	public void onChangeDecision() {
